@@ -6,10 +6,6 @@ export enum ItemType {
 }
 
 /** Item for IndexedDB */
-export interface Item {
-    itemType: ItemType, date: Date
-}
-export function Item(itemType: ItemType, date: Date):Item {return {itemType,date}}
-export interface ItemWithDate extends Item {
-        itemId:number;
+export class Item {
+    constructor(public itemType: ItemType, public  date: Date=new Date(), public desc:string=''){};
 }
