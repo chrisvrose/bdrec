@@ -8,8 +8,7 @@ export const Header: FC<HeaderProps> = function ({ title }) {
     return (
         <Head>
             <title>{title}</title>
-            {/* TODO add desc */}
-            <meta name="description" content="Sample desc" />
+            <meta name="description" content="Vitals Recording" />
             <link rel="icon" href="/favicon.ico" />
             <link
                 rel="apple-touch-icon"
