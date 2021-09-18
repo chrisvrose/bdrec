@@ -6,6 +6,6 @@ module.exports = withPWA({
     pwa: {
         dest: 'public',
         // disable if not production
-        disable: process.env.NODE_ENV !== 'production',
+        disable: process.env.NODE_ENV === 'development',
     },
 });

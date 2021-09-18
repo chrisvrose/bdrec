@@ -21,9 +21,7 @@ function keySplitter(x:string):[string,number,number?]{
  */
 export function useIDBFetcher(key:string,reverse:boolean=false,offset:number=0,length?:number,options?:Partial<{dedupingInterval:number,errorRetryCount:number,refreshInterval:number,refreshWhenHidden:boolean,revalidateOnFocus:boolean}>){
     const fetcher =  useSWR(keyMaker(key,reverse,offset,length),()=>{
-        console.log('Called mutation',key,reverse,offset,length)
         return IDBItemHandler.getFromOffset(offset,length,reverse);
-
     },options);
     return fetcher;
 }

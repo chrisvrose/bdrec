@@ -7,5 +7,5 @@ export enum ItemType {
 
 /** Item for IndexedDB */
 export class Item {
-    constructor(public itemType: ItemType, public  date: Date=new Date(), public desc:string=''){};
+    constructor(public itemType: ItemType, public  date: Date=new Date(),public value:number=0, public desc:string=''){};
 }

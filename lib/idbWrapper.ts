@@ -1,6 +1,5 @@
 import { DBSchema, IDBPDatabase, IDBPObjectStore, openDB } from 'idb';
-import { Item, ItemType } from './Item';
-
+import { Item } from './Item';
 /**
  * Convenience wrapper type
  */
@@ -10,6 +9,7 @@ export interface ItemSchema extends DBSchema {
         value: Item;
     };
 }
+
 /**
  * IndexedDB Wrapper using Item
  */
@@ -111,7 +111,7 @@ export class IDBItemHandler {
         return items;
     }
 
-    static async flush() {
+    static async clear() {
         const db = await this.db;
         return db.clear('readings');
     }

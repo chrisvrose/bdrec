@@ -1,18 +1,22 @@
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Header } from '../components/Header';
 import { IDBItemHandler } from '../lib/idbWrapper';
 import { Item } from '../lib/Item';
 import styles from '../styles/Home.module.scss';
-import useSWR from 'swr';
 import { Button } from 'react-bootstrap';
 import { useIDBFetcher } from '../lib/miscSwr';
+import { ItemView } from '../components/ItemView';
 const Home: NextPage = () => {
-    const [x,setX] = useState(2);
-    const [y,setY] = useState(false);
-    console.log('Rerender for x,y',x,y)
-    const { data, error, isValidating,mutate } = useIDBFetcher('getVal',y,undefined,undefined,{refreshInterval:2000})
-    
+    const [x, setX] = useState(10);
+    const { data, error, mutate } = useIDBFetcher(
+        'getVal',
+        true,
+        undefined,
+        x,
+        { refreshInterval: 2000 }
+    );
+
     if (error) {
         return <div className={styles.container}>Error {error.toString()}</div>;
     }
@@ -24,13 +28,38 @@ const Home: NextPage = () => {
         <>
             <Header title="Pain" />
             <div className={styles.container}>
-                {JSON.stringify(data)}
-                <Button onClick={(event)=>setX(2-x)}>Change</Button>
-                <Button onClick={(e)=>{IDBItemHandler.add(new Item(0));mutate(undefined,true)}}>Add</Button>
-                <Button onClick={(e)=>{setY(!y);mutate(undefined,true)}} >Flip</Button>
-                <Button onClick={(e)=>{mutate(undefined,true)}}>Mutate</Button>
-                <Button onClick={(e)=>{IDBItemHandler.flush()}}>Flush</Button>
+                {data.map((e) => (
+                    <ItemView key={JSON.stringify(e)} {...e} />
+                ))}
+                <br />
+                <Button
+                    onClick={(e) => {
+                        IDBItemHandler.add(new Item(0));
+                        mutate(undefined, true);
+                    }}
+                >
+                    Add
+                </Button>
+                <br />
 
+                <Button
+                    onClick={(e) => {
+                        mutate(undefined, true);
+                    }}
+                >
+                    Mutate
+                </Button>
+                <br />
+
+                <Button
+                    onClick={(e) => {
+                        IDBItemHandler.clear();
+                        mutate(undefined, true);
+                    }}
+                >
+                    Clear
+                </Button>
+                <br />
             </div>
         </>
     );
