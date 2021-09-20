@@ -11,7 +11,7 @@ export const ItemView: FC<Item & { eventKey: string }> = function ({
     eventKey,
 }) {
     return (
-        <Card>
+        <Card bg="dark">
             <Accordion.Toggle as={Card.Header} eventKey={eventKey}>
                 Click me!
                 {date.toString()}

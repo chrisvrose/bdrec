@@ -6,7 +6,10 @@ export enum ItemType {
     SL,
 }
 
-export const itemTypeMap = {
+/**
+ * String representation of the entire ordeal
+ */
+export const itemTypeMap:{[k in ItemType]:string} = {
     [ItemType.TEMP]:'Temperature',
     [ItemType.OXY]:'Blood Oxygen Levels',
     [ItemType.PULSE]:'Pulse',
