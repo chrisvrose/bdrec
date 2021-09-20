@@ -3,11 +3,16 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Nav, Navbar } from 'react-bootstrap';
 import styles from '../styles/Header.module.scss';
+
+/** Props for header */
 export type HeaderProps = {
+    /** Title of above window */
     title: string;
+    /** Current active key in the navbar */
     activeKey:'home'|'plot';
 };
 
+/** Head along with Navbar */
 export const Header: FC<HeaderProps> = function ({ title , activeKey}) {
     return <>
         <Head>
