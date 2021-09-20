@@ -42,7 +42,7 @@ export const ItemsView: FC = function () {
             <br />
             <Button
                 onClick={(e) => {
-                    IDBItemHandler.add(new Item(0));
+                    IDBItemHandler.add(Item(0));
                     mutate(undefined, true);
                 }}
             >

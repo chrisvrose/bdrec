@@ -1,25 +1,23 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { Card, Accordion } from 'react-bootstrap';
-import type { Item } from '../lib/Item';
+import { dateTimeFormatOptions } from '../lib/constants';
+import { Item, ItemFormat, itemTypeMap } from '../lib/Item';
 import { ItemTypeToString } from '../lib/Item';
 
-export const ItemView: FC<Item & { eventKey: string }> = function ({
-    date,
-    itemType,
-    value,
-    desc,
-    eventKey,
-}) {
+export const ItemView: FC<Item & { eventKey: string }> = function (
+    props
+) {
+    const {date,eventKey,itemType} = props;
     return (
         <Card bg="dark">
             <Accordion.Toggle as={Card.Header} eventKey={eventKey}>
-                Click me!
-                {date.toString()}
+                {`${date.toLocaleString('en-us',dateTimeFormatOptions)} ${ItemTypeToString(itemType)} - ${ItemFormat(props)}`}
             </Accordion.Toggle>
 
             <Accordion.Collapse eventKey={eventKey}>
                 <Card.Body>
-                    {date.toString()} {ItemTypeToString(itemType)}
+                    {ItemTypeToString(itemType)}
+                    {ItemFormat(props)}
                 </Card.Body>
             </Accordion.Collapse>
         </Card>
