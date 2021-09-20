@@ -1,11 +1,15 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
+import { Nav, Navbar } from 'react-bootstrap';
+import styles from '../styles/Header.module.scss';
 export type HeaderProps = {
     title: string;
+    activeKey:'home'|'plot';
 };
 
-export const Header: FC<HeaderProps> = function ({ title }) {
-    return (
+export const Header: FC<HeaderProps> = function ({ title , activeKey}) {
+    return <>
         <Head>
             <title>{title}</title>
             <meta name="description" content="Vitals Recording" />
@@ -30,5 +34,31 @@ export const Header: FC<HeaderProps> = function ({ title }) {
             <link rel="manifest" href="/site.webmanifest" />
             <meta name="theme-color" content="#bc7100"/>
         </Head>
-    );
+        <Navbar
+                bg="dark"
+                expand="md"
+                fixed="top"
+                variant="dark"
+                className="card-1"
+            >
+                <Navbar.Brand>Vitals Recorder</Navbar.Brand>
+                <Navbar.Toggle aria-controls="navbar-toggleable" />
+                <Navbar.Collapse id="navbar-toggleable">
+                    <Nav
+                        activeKey={activeKey}
+                        className="justify-content-end mr-auto"
+                    >
+                        <Link href="/" passHref>
+                            <Nav.Link eventKey="home">Home</Nav.Link>
+                        </Link>
+
+                        <Link href="/plot" passHref>
+                            <Nav.Link eventKey="plot">Plot</Nav.Link>
+                        </Link>
+                        
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+        
+        </>
 };

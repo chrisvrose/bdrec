@@ -7,7 +7,7 @@ import Link from 'next/link';
 const Home: NextPage = () => {
     return (
         <>
-            <Header title="Pain" />
+            <Header title="Pain" activeKey="home"/>
             <Nav variant="tabs" defaultActiveKey="/home">
                 <Nav.Item>
                     <Nav.Link as={Link} passHref href="/home">Active</Nav.Link>
