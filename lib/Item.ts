@@ -68,7 +68,7 @@ export interface Item {
 }
 /** Making an item */
 export function Item(
-    itemType: ItemType,
+    itemType: ItemType=ItemType.TEMP,
     date: Date = new Date(),
     value: number = 0,
     desc: string = ''

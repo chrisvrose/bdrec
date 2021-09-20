@@ -1,4 +1,5 @@
-import { FC, useState } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 import { Accordion, Button } from 'react-bootstrap';
 import { IDBItemHandler } from '../lib/idbWrapper';
 import { Item } from '../lib/Item';

@@ -6,7 +6,7 @@ import { Container } from 'react-bootstrap';
 const Home: NextPage = () => {
     return (
         <>
-            <Header title="Pain" activeKey="home" />
+            <Header title="Log" activeKey="home" />
             <Container>
                 <ItemsView />
             </Container>
