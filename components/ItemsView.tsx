@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, ReactChild } from 'react';
 import { useState } from 'react';
 import { Accordion, Button } from 'react-bootstrap';
 import { pageSizes } from '../lib/constants';
@@ -8,7 +8,6 @@ import { useIDBFetcher } from '../lib/miscSwr';
 import { ItemView } from './ItemView';
 
 export const ItemsView: FC = function () {
-    
     const { data, error, mutate } = useIDBFetcher(
         'getVal',
         true,
@@ -17,16 +16,15 @@ export const ItemsView: FC = function () {
         { refreshInterval: 2000 }
     );
 
-    let val;
+    let dataFragment: ReactChild;
     if (error) {
-        val = <div>Error {error.toString()}</div>;
-    }
-    if (!data) {
-        val = <div>Loading</div>;
+        dataFragment = <div>Error {error.toString()}</div>;
+    } else if (!data) {
+        dataFragment = <div>Loading</div>;
     } else if ((data.length ?? 0) === 0) {
-        val = <div>No data</div>;
+        dataFragment = <div>No data (Add an entry)</div>;
     } else
-        val = (
+        dataFragment = (
             <Accordion>
                 {data.map((e) => (
                     <ItemView
@@ -40,8 +38,8 @@ export const ItemsView: FC = function () {
 
     return (
         <>
-            {val}
-            
+            {dataFragment}
+
             <br />
             <Button
                 onClick={(e) => {
