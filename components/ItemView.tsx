@@ -6,7 +6,7 @@ import { Item, ItemValueFormat, itemTypeMap } from '../lib/Item';
 import { ItemTypeToString } from '../lib/Item';
 
 export const ItemView: FC<Item & { eventKey: string }> = function (props) {
-    const { date, eventKey, itemType } = props;
+    const { date, eventKey, itemType,desc } = props;
     const [showDelete, setShowDelete] = useState(false);
     const setHideDeleteModal = () => setShowDelete(false);
     const setShowDeleteModal = () => setShowDelete(true);
@@ -36,6 +36,8 @@ export const ItemView: FC<Item & { eventKey: string }> = function (props) {
                             {ItemTypeToString(itemType)}
                             {` - `}
                             {ItemValueFormat(props)}
+                            <br />
+                            {desc}
                         </Card.Text>
                         <Button variant="primary" onClick={setShowDeleteModal}>
                             Delete
