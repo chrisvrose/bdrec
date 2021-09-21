@@ -42,8 +42,8 @@ export function tempUnitConvert(x: number) {
           };
 }
 
-/** Format item for college */
-export function ItemFormat(x: Item) {
+/** Format item value */
+export function ItemValueFormat(x: Item) {
     switch (x.itemType) {
         case ItemType.TEMP:
             const { unitString, num } = tempUnitConvert(x.value);

@@ -27,9 +27,21 @@ a {
 
 
 // utility styles
+.modal-content,
+.dark-bg{
+  background-color: c.$back;
+  @extend .card-1;
+}
+.modal-header{
+  border-bottom-color: c.$accentDarker;
+}
+.modal-footer{
+  border-top-color: c.$accentDarker;
+}
 .card-1 {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
+
 
 .card-1-hover {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);

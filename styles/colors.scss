@@ -5,3 +5,6 @@ $accent: #bc7100;
 
 // #ef90000
 $accentLighter: lighten($accent,10%);
+
+
+$accentDarker: darken($accent,10%);

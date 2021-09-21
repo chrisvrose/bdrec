@@ -115,6 +115,10 @@ export class IDBItemHandler {
         const db = await this.db;
         return db.clear('readings');
     }
+    static async delete(k:Item[typeof IDBItemHandler._keyPath]){
+        const db = await this.db;
+        return db.delete(IDBItemHandler._collName, k);
+    }
 }
 
 /**
