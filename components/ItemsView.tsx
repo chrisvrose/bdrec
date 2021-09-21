@@ -1,18 +1,19 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { Accordion, Button } from 'react-bootstrap';
+import { pageSizes } from '../lib/constants';
 import { IDBItemHandler } from '../lib/idbWrapper';
 import { Item } from '../lib/Item';
 import { useIDBFetcher } from '../lib/miscSwr';
 import { ItemView } from './ItemView';
 
 export const ItemsView: FC = function () {
-    const [x, setX] = useState(10);
+    
     const { data, error, mutate } = useIDBFetcher(
         'getVal',
         true,
         undefined,
-        x,
+        pageSizes,
         { refreshInterval: 2000 }
     );
 
@@ -40,6 +41,7 @@ export const ItemsView: FC = function () {
     return (
         <>
             {val}
+            
             <br />
             <Button
                 onClick={(e) => {

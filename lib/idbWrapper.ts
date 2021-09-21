@@ -92,22 +92,29 @@ export class IDBItemHandler {
         length?: number,
         reverse: boolean = false
     ) {
-        let cursor = await (await this.db)
-            .transaction('readings', 'readonly')
-            .store.openCursor(undefined, reverse ? 'prev' : 'next');
+        // create a transaction
+        const transaction = (await this.db).transaction('readings', 'readonly');
+        // open a cursor for streamed reading (open reverse if arg is true)
+        let cursor = await transaction.store.openCursor(
+            undefined,
+            reverse ? 'prev' : 'next'
+        );
 
         // advance scroll and set it (if already empty its forwarded to null)
         // do this only for positive ints
         if (from > 0) cursor = (await cursor?.advance(from)) ?? null;
 
+        // number of items processed
         let i = 0;
         const items: Item[] = [];
-        // skip length check if undefined
+        // skip length check if undefined -> this will allow for getting all items from there, no length limit
         while (cursor && (length === undefined || i < length)) {
             items.push(cursor.value);
             i++;
             cursor = await cursor.continue();
         }
+        //close it
+        transaction.commit();
         return items;
     }
 
@@ -115,7 +122,7 @@ export class IDBItemHandler {
         const db = await this.db;
         return db.clear('readings');
     }
-    static async delete(k:Item[typeof IDBItemHandler._keyPath]){
+    static async delete(k: Item[typeof IDBItemHandler._keyPath]) {
         const db = await this.db;
         return db.delete(IDBItemHandler._collName, k);
     }
