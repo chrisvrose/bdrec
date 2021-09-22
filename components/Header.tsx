@@ -2,7 +2,6 @@ import type { FC } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import styles from '../styles/Header.module.scss';
 
 /** Props for header */
 export type HeaderProps = {

@@ -1,11 +1,12 @@
 import type { FC, ReactChild } from 'react';
 import { useState } from 'react';
-import { Accordion, Button } from 'react-bootstrap';
+import { Accordion, Button, ButtonGroup, Col, Container, Row } from 'react-bootstrap';
 import { pageSizes } from '../lib/constants';
 import { IDBItemHandler } from '../lib/idbWrapper';
 import { Item } from '../lib/Item';
 import { useIDBFetcher } from '../lib/miscSwr';
 import { ItemView } from './ItemView';
+import Link from 'next/link';
 
 export const ItemsView: FC = function () {
     const { data, error, mutate } = useIDBFetcher(
@@ -15,6 +16,7 @@ export const ItemsView: FC = function () {
         pageSizes,
         { refreshInterval: 2000 }
     );
+    const updateData = () => mutate(undefined, true);
 
     let dataFragment: ReactChild;
     if (error) {
@@ -41,25 +43,37 @@ export const ItemsView: FC = function () {
             {dataFragment}
 
             <br />
-            <Button
-                onClick={(e) => {
-                    IDBItemHandler.add(Item(0));
-                    mutate(undefined, true);
-                }}
-            >
-                Add
-            </Button>
-            <br />
 
-            <Button
-                onClick={(e) => {
-                    IDBItemHandler.clear();
-                    mutate(undefined, true);
-                }}
-            >
-                Clear
-            </Button>
-            <br />
+            <Row style={{ textAlign: 'center' }} md={8}>
+                <Col md={{span: 6,offset:3}}>
+                    <ButtonGroup
+                        aria-label="Buttons"
+                        className="full-width spacer-top-margin"
+                    >
+                        {/* <Button onClick={()=>{}}>Add</Button> */}
+                        <Button
+                            onClick={() => {
+                                IDBItemHandler.add(Item(0));
+                                updateData();
+                            }}
+                        >
+                            Add
+                        </Button>
+                        {/* <br /> */}
+
+                        <Button
+                            onClick={() => {
+                                IDBItemHandler.clear();
+                                updateData();
+                            }}
+                        >
+                            Clear
+                        </Button>
+
+                    </ButtonGroup>
+                </Col>
+            </Row>
+            
         </>
     );
 };
