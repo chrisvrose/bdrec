@@ -1,6 +1,14 @@
 import type { FC, ReactChild } from 'react';
 import { useState } from 'react';
-import { Accordion, Button, ButtonGroup, Col, Container, Row } from 'react-bootstrap';
+import {
+    Accordion,
+    Button,
+    ButtonGroup,
+    Col,
+    Container,
+    Modal,
+    Row,
+} from 'react-bootstrap';
 import { pageSizes } from '../lib/constants';
 import { IDBItemHandler } from '../lib/idbWrapper';
 import { Item } from '../lib/Item';
@@ -17,6 +25,17 @@ export const ItemsView: FC = function () {
         { refreshInterval: 2000 }
     );
     const updateData = () => mutate(undefined, true);
+
+    const [showClearModal, setShowClearModal] = useState(false);
+    const confirmClear = async () => {
+        try {
+            await IDBItemHandler.clear();
+            updateData();
+            setShowClearModal(false);
+        } catch (e) {
+            console.log('Failed to clear', e);
+        }
+    };
 
     let dataFragment: ReactChild;
     if (error) {
@@ -45,7 +64,7 @@ export const ItemsView: FC = function () {
             <br />
 
             <Row style={{ textAlign: 'center' }} md={8}>
-                <Col md={{span: 6,offset:3}}>
+                <Col md={{ span: 6, offset: 3 }}>
                     <ButtonGroup
                         aria-label="Buttons"
                         className="full-width spacer-top-margin"
@@ -62,18 +81,31 @@ export const ItemsView: FC = function () {
                         {/* <br /> */}
 
                         <Button
-                            onClick={() => {
-                                IDBItemHandler.clear();
-                                updateData();
-                            }}
+                            onClick={() => setShowClearModal(true)}
                         >
                             Clear
                         </Button>
-
                     </ButtonGroup>
                 </Col>
+                <Modal
+                    show={showClearModal}
+                    onHide={() => setShowClearModal(false)}
+                >
+                    <Modal.Header>Clear?</Modal.Header>
+                    <Modal.Body>Confirm Clearing all entries?</Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setShowClearModal(false)}
+                        >
+                            Cancel
+                        </Button>
+                        <Button variant="primary" onClick={confirmClear}>
+                            Confirm
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </Row>
-            
         </>
     );
 };

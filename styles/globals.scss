@@ -29,7 +29,7 @@ a {
 // utility styles
 .modal-content,
 .dark-bg{
-  background-color: c.$back;
+  background-color: c.$backLighter;
   @extend .card-1;
 }
 .modal-header{
