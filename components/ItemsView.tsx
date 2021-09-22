@@ -59,10 +59,6 @@ export const ItemsView: FC = function () {
 
     return (
         <>
-            {dataFragment}
-
-            <br />
-
             <Row style={{ textAlign: 'center' }} md={8}>
                 <Col md={{ span: 6, offset: 3 }}>
                     <ButtonGroup
@@ -80,32 +76,37 @@ export const ItemsView: FC = function () {
                         </Button>
                         {/* <br /> */}
 
-                        <Button
-                            onClick={() => setShowClearModal(true)}
-                        >
+                        <Button onClick={() => setShowClearModal(true)}>
                             Clear
                         </Button>
                     </ButtonGroup>
                 </Col>
-                <Modal
-                    show={showClearModal}
-                    onHide={() => setShowClearModal(false)}
-                >
-                    <Modal.Header>Clear?</Modal.Header>
-                    <Modal.Body>Confirm Clearing all entries?</Modal.Body>
-                    <Modal.Footer>
-                        <Button
-                            variant="secondary"
-                            onClick={() => setShowClearModal(false)}
-                        >
-                            Cancel
-                        </Button>
-                        <Button variant="primary" onClick={confirmClear}>
-                            Confirm
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
             </Row>
+            <Modal
+                show={showClearModal}
+                onHide={() => setShowClearModal(false)}
+            >
+                <Modal.Header>Clear?</Modal.Header>
+                <Modal.Body>Confirm Clearing all entries?</Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setShowClearModal(false)}
+                    >
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={confirmClear}>
+                        Confirm
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            
+            <br />
+
+            {dataFragment}
+
+
+            
         </>
     );
 };
