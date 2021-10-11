@@ -6,15 +6,18 @@ import {
     ButtonGroup,
     Col,
     Container,
+    Dropdown,
+    DropdownButton,
     Modal,
     Row,
 } from 'react-bootstrap';
 import { pageSizes } from '../lib/constants';
 import { IDBItemHandler } from '../lib/idbWrapper';
-import { Item } from '../lib/Item';
+import { Item, ItemType, itemTypeMap } from '../lib/Item';
 import { useIDBFetcher } from '../lib/miscSwr';
 import { ItemView } from './ItemView';
 import Link from 'next/link';
+import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 
 export const ItemsView: FC = function () {
     const { data, error, mutate } = useIDBFetcher(
@@ -66,16 +69,21 @@ export const ItemsView: FC = function () {
                         className="full-width spacer-top-margin"
                     >
                         {/* <Button onClick={()=>{}}>Add</Button> */}
-                        <Button
+                        {/* <Button
                             onClick={() => {
                                 IDBItemHandler.add(Item(0));
                                 updateData();
                             }}
                         >
                             Add
-                        </Button>
+                        </Button> */}
+                        <DropdownButton as={ButtonGroup} title="Add" >
+                            {/* <Dropdown.Item eventKey="1">Temperature</Dropdown.Item> */}
+                            <Dropdown.Item eventKey="1" onClick={()=>{IDBItemHandler.add(Item(ItemType.TEMP,undefined,undefined,'no'))}}>{itemTypeMap[ItemType.TEMP]}</Dropdown.Item>
+                            <Dropdown.Item eventKey="2" onClick={()=>{IDBItemHandler.add(Item(ItemType.OXY,undefined,98 ,'no'))}}>{itemTypeMap[ItemType.OXY]}</Dropdown.Item>
+                        </DropdownButton>
                         {/* <br /> */}
-
+                        <Button onClick={()=>updateData()}>Refresh </Button>
                         <Button onClick={() => setShowClearModal(true)}>
                             Clear
                         </Button>
