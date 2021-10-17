@@ -8,6 +8,8 @@ import {
     Container,
     Dropdown,
     DropdownButton,
+    Form,
+    InputGroup,
     Modal,
     Row,
 } from 'react-bootstrap';
@@ -30,6 +32,9 @@ export const ItemsView: FC = function () {
     const updateData = () => mutate(undefined, true);
 
     const [showClearModal, setShowClearModal] = useState(false);
+
+    const [showCreateTemp, setShowCreateTemp] = useState(false);
+
     const confirmClear = async () => {
         try {
             await IDBItemHandler.clear();
@@ -77,13 +82,37 @@ export const ItemsView: FC = function () {
                         >
                             Add
                         </Button> */}
-                        <DropdownButton as={ButtonGroup} title="Add" >
+                        <DropdownButton as={ButtonGroup} title="Add">
                             {/* <Dropdown.Item eventKey="1">Temperature</Dropdown.Item> */}
-                            <Dropdown.Item eventKey="1" onClick={()=>{IDBItemHandler.add(Item(ItemType.TEMP,undefined,undefined,'no'))}}>{itemTypeMap[ItemType.TEMP]}</Dropdown.Item>
-                            <Dropdown.Item eventKey="2" onClick={()=>{IDBItemHandler.add(Item(ItemType.OXY,undefined,98 ,'no'))}}>{itemTypeMap[ItemType.OXY]}</Dropdown.Item>
+                            <Dropdown.Item
+                                eventKey="1"
+                                onClick={() => {
+                                    setShowCreateTemp(true);
+                                    IDBItemHandler.add(
+                                        Item(
+                                            ItemType.TEMP,
+                                            undefined,
+                                            undefined,
+                                            'no'
+                                        )
+                                    );
+                                }}
+                            >
+                                {itemTypeMap[ItemType.TEMP]}
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                                eventKey="2"
+                                onClick={() => {
+                                    IDBItemHandler.add(
+                                        Item(ItemType.OXY, undefined, 98, 'no')
+                                    );
+                                }}
+                            >
+                                {itemTypeMap[ItemType.OXY]}
+                            </Dropdown.Item>
                         </DropdownButton>
                         {/* <br /> */}
-                        <Button onClick={()=>updateData()}>Refresh </Button>
+                        <Button onClick={() => updateData()}>Refresh </Button>
                         <Button onClick={() => setShowClearModal(true)}>
                             Clear
                         </Button>
@@ -108,13 +137,57 @@ export const ItemsView: FC = function () {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            
+
+            <Modal
+                show={showCreateTemp}
+                onHide={() => {
+                    setShowCreateTemp(false);
+                }}
+            >
+                <Modal.Header>Add temp</Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group>
+                            <Form.Label>Temperature</Form.Label>
+                            <Form.Control
+                                placeholder="Temperature"
+                                type="number"
+                            />
+                        </Form.Group>
+
+                        <Form.Group>
+                            <Form.Label>Unit</Form.Label>
+                            <Form.Control as="select">
+                                <option>C</option>
+                                <option>F</option>
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group controlId="exampleForm.ControlTextarea1">
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control as="textarea" rows={3} placeholder="Description(Optional)" />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setShowCreateTemp(false)}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="primary"
+                        onClick={() => setShowCreateTemp(false)}
+                    >
+                        Confirm
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
             <br />
 
             {dataFragment}
-
-
-            
         </>
     );
 };
