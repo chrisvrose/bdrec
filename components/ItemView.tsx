@@ -1,4 +1,5 @@
-import { FC, useState } from 'react';
+import type{ FC } from 'react';
+import { useState } from 'react';
 import { Card, Accordion, Button, Modal } from 'react-bootstrap';
 import { dateTimeFormatOptions } from '../lib/constants';
 import { IDBItemHandler } from '../lib/idbWrapper';
@@ -6,16 +7,16 @@ import { Item, ItemValueFormat, itemTypeMap } from '../lib/Item';
 import { ItemTypeToString } from '../lib/Item';
 
 export const ItemView: FC<Item & { eventKey: string }> = function (props) {
-    const { date, eventKey, itemType,desc } = props;
+    const { date, eventKey, itemType, desc } = props;
     const [showDelete, setShowDelete] = useState(false);
     const setHideDeleteModal = () => setShowDelete(false);
     const setShowDeleteModal = () => setShowDelete(true);
-    const confirmDeleteModal = async() => {
-        try{
+    const confirmDeleteModal = async () => {
+        try {
             await IDBItemHandler.delete(date);
             setShowDelete(false);
-        }catch(e){
-            console.log('Failed to delete',e);
+        } catch (e) {
+            console.log('Failed to delete', e);
         }
     };
     return (
