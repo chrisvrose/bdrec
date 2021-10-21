@@ -10,8 +10,8 @@ export class LocalStorageWrapper{
         return localStorage.getItem(localStorageKeys[key])??f;
     }
     /** Put element in data */
-    static put(k:string,v:string){
-        return localStorage.setItem(k,v);
+    static put(k:localStorageKeys,v:string){
+        return localStorage.setItem(localStorageKeys[k],v);
     }
 
     /** Clear all entries */

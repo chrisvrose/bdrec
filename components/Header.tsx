@@ -8,7 +8,7 @@ export type HeaderProps = {
     /** Title of above window */
     title: string;
     /** Current active key in the navbar */
-    activeKey: 'home' | 'plot';
+    activeKey: 'home' | 'plot'|'settings';
 };
 
 /** Head along with Navbar */
@@ -60,6 +60,9 @@ export const Header: FC<HeaderProps> = function ({ title, activeKey }) {
 
                             <Link href="/plot" passHref>
                                 <Nav.Link eventKey="plot">Plot</Nav.Link>
+                            </Link>
+                            <Link href="/settings" passHref>
+                                <Nav.Link eventKey="settings">Settings</Nav.Link>
                             </Link>
                         </Nav>
                     </Navbar.Collapse>

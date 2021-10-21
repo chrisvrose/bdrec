@@ -15,7 +15,7 @@ import {
 } from 'react-bootstrap';
 import { pageSizes } from '../lib/constants';
 import { IDBItemHandler } from '../lib/idbWrapper';
-import { Item, ItemType, itemTypeMap } from '../lib/Item';
+import { Item, ItemType, itemTypeMap, toTempMiddleFormat } from '../lib/Item';
 import { useIDBFetcher } from '../lib/miscSwr';
 import { ItemView } from './ItemView';
 import Link from 'next/link';
@@ -88,14 +88,6 @@ export const ItemsView: FC = function () {
                                 eventKey="1"
                                 onClick={() => {
                                     setShowCreateTemp(true);
-                                    IDBItemHandler.add(
-                                        Item(
-                                            ItemType.TEMP,
-                                            undefined,
-                                            undefined,
-                                            'no'
-                                        )
-                                    );
                                 }}
                             >
                                 {itemTypeMap[ItemType.TEMP]}
@@ -144,45 +136,67 @@ export const ItemsView: FC = function () {
                     setShowCreateTemp(false);
                 }}
             >
-                <Modal.Header>Add temp</Modal.Header>
-                <Modal.Body>
-                    <Form>
+                <Form
+                    onSubmit={async (e) => {
+                        e.preventDefault();
+                        // little foobar
+                        const formElement = e.target as any;
+                        const num = Number(formElement.temp.value);
+                        const desc:string = formElement.desc.value;
+                        // whether c is checked
+                        const unit:boolean = formElement.unit.value==='on' && formElement.unit[0].checked;
+                        const tempMiddle = toTempMiddleFormat(num,unit);
+                        console.log('created', num, tempMiddle,desc, unit,);
+                        IDBItemHandler.add(
+                            Item(ItemType.TEMP, undefined,tempMiddle, desc)
+                        );
+
+                        setShowCreateTemp(false);
+                    }}
+                >
+                    <Modal.Header>Add temp</Modal.Header>
+                    <Modal.Body>
                         <Form.Group>
                             <Form.Label>Temperature</Form.Label>
                             <Form.Control
                                 placeholder="Temperature"
                                 type="number"
+                                name="temp"
+                                min={0}
+                                max={200}
+                                step={0.01}
                             />
                         </Form.Group>
 
                         <Form.Group>
-                            <Form.Label>Unit</Form.Label>
-                            <Form.Control as="select">
-                                <option>C</option>
-                                <option>F</option>
-                            </Form.Control>
+                            <Form.Label>Unit</Form.Label><br />
+                            <Form.Check inline type="radio" name="unit" label="C" />
+                            <Form.Check inline type="radio" name="unit" label="F" />
+                            
                         </Form.Group>
                         <Form.Group controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Description</Form.Label>
-                            <Form.Control as="textarea" rows={3} placeholder="Description(Optional)" />
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                placeholder="Description(Optional)"
+                                name="desc"
+                            />
                         </Form.Group>
-                    </Form>
-                </Modal.Body>
+                    </Modal.Body>
 
-                <Modal.Footer>
-                    <Button
-                        variant="secondary"
-                        onClick={() => setShowCreateTemp(false)}
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        variant="primary"
-                        onClick={() => setShowCreateTemp(false)}
-                    >
-                        Confirm
-                    </Button>
-                </Modal.Footer>
+                    <Modal.Footer>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setShowCreateTemp(false)}
+                        >
+                            Cancel
+                        </Button>
+                        <Button variant="primary" type="submit">
+                            Confirm
+                        </Button>
+                    </Modal.Footer>
+                </Form>
             </Modal>
 
             <br />

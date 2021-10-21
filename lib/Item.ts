@@ -41,13 +41,23 @@ export function tempUnitConvert(x: number) {
               num: 9 * x + 32,
           };
 }
+/**
+ *
+ * @param x input number
+ * @param isCelcius is celcius (true)
+ */
+export function toTempMiddleFormat(x: number, isCelcius: boolean = true) {
+    if (isCelcius) return x / 5;
+    // for fahrenheit
+    else return (x - 32) / 9;
+}
 
 /** Format item value */
 export function ItemValueFormat(x: Item) {
     switch (x.itemType) {
         case ItemType.TEMP:
             const { unitString, num } = tempUnitConvert(x.value);
-            return `${num} ${unitString}`;
+            return `${num.toFixed(2)} ${unitString}`;
         case ItemType.BP:
             return `${x.value} mm Hg.`;
         case ItemType.OXY:
@@ -68,7 +78,7 @@ export interface Item {
 }
 /** Making an item */
 export function Item(
-    itemType: ItemType=ItemType.TEMP,
+    itemType: ItemType = ItemType.TEMP,
     date: Date = new Date(),
     value: number = 0,
     desc: string = ''
