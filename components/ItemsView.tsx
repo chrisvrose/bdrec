@@ -155,7 +155,7 @@ export const ItemsView: FC = function () {
                                 else setPageNum(pageNum - 1);
                             }}
                         >
-                            Previous
+                            Prev
                         </Button>
                         <Button disabled>{`${
                             pageNum + 1
