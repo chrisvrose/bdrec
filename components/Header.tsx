@@ -8,7 +8,7 @@ export type HeaderProps = {
     /** Title of above window */
     title: string;
     /** Current active key in the navbar */
-    activeKey: 'home' | 'plot'|'settings';
+    activeKey: 'home' | 'plot'|'settings'|undefined;
 };
 
 /** Head along with Navbar */
