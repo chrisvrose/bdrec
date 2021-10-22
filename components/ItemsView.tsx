@@ -141,7 +141,7 @@ export const ItemsView: FC = function () {
 
             <Row style={{ textAlign: 'center' }} md={8}>
                 <Col md={{ span: 6, offset: 3 }}>
-                    <ButtonGroup className="spacer-top-margin">
+                    <ButtonGroup className="spacer-top-margin-lot">
                         <Button
                             onClick={() => {
                                 if (pageNum > pageCount) setPageNum(0);
@@ -165,6 +165,7 @@ export const ItemsView: FC = function () {
                     </ButtonGroup>
                 </Col>
             </Row>
+            <div className="spacer-top-margin" />
         </>
     );
 };
