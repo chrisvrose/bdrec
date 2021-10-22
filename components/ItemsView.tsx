@@ -12,7 +12,7 @@ import {
 } from 'react-bootstrap';
 import { pageSizes } from '../lib/constants';
 import { IDBItemHandler } from '../lib/idbWrapper';
-import { Item, ItemType, itemTypeMap } from '../lib/Item';
+import { ItemType, itemTypeMap } from '../lib/Item';
 import { useIDBFetcher } from '../lib/miscSwr';
 import { ItemView } from './ItemView';
 import { CreateTempForm } from './CreateTempForm';
@@ -72,7 +72,6 @@ export const ItemsView: FC = function () {
                         className="full-width spacer-top-margin"
                     >
                         <DropdownButton as={ButtonGroup} title="Add">
-                            {/* <Dropdown.Item eventKey="1">Temperature</Dropdown.Item> */}
                             <Dropdown.Item
                                 eventKey="1"
                                 onClick={() => {
