@@ -6,8 +6,8 @@ import { IDBItemHandler } from '../lib/idbWrapper';
 import { Item, ItemValueFormat } from '../lib/Item';
 import { ItemTypeToString } from '../lib/Item';
 
-export const ItemView: FC<Item & { eventKey: string }> = function (props) {
-    const { date, eventKey, itemType, desc } = props;
+export const ItemView: FC<Item & { eventKey: string,updateData:()=>Promise<void> }> = function (props) {
+    const { date, eventKey, itemType, desc, updateData} = props;
     const [showDelete, setShowDelete] = useState(false);
     const setHideDeleteModal = () => setShowDelete(false);
     const setShowDeleteModal = () => setShowDelete(true);
@@ -15,6 +15,7 @@ export const ItemView: FC<Item & { eventKey: string }> = function (props) {
         try {
             await IDBItemHandler.delete(date);
             setShowDelete(false);
+            await updateData();
         } catch (e) {
             console.log('Failed to delete', e);
         }

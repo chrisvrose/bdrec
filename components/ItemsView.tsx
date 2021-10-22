@@ -18,6 +18,8 @@ import { ItemView } from './ItemView';
 import { CreateTempForm } from './forms/CreateTempForm';
 import { CreateOxyForm } from './forms/CreateOxyForm';
 
+
+
 export const ItemsView: FC = function () {
     // which page am i in?
     const [pageNum, setPageNum] = useState(0);
@@ -26,13 +28,16 @@ export const ItemsView: FC = function () {
     // how many pages?
     const [pageCount, setPageCount] = useState(1);
     // fetch the number of pages when starting
+    async function refreshCount(){
+        const count = await IDBItemHandler.getCount();
+        // >>0 forces a convert to integer style math - much faster than rounding altho less readable
+        // setPageCount(((count / pageSizes) >> 0) + 1);
+        setPageCount(Math.ceil(count / pageSizes))
+    }
     useEffect(() => {
-        (async () => {
-            const count = await IDBItemHandler.getCount();
-            // >>0 forces a convert to integer style math - much faster than rounding altho less readable
-            setPageCount(((count / pageSizes) >> 0) + 1);
-        })().catch((e) => console.error('Error fetching page count', e));
+        refreshCount().catch((e) => console.error('Error fetching page count', e));
     }, []);
+
     // data fetching
     const { data, error, mutate } = useIDBFetcher(
         'getVal',
@@ -42,7 +47,7 @@ export const ItemsView: FC = function () {
         { refreshInterval: 2000 }
     );
     // helper function
-    const updateData = () => mutate(undefined, true);
+    const updateData = async() => {await refreshCount();await mutate(undefined, true);}
 
     // delete everything modal state
     const [showClearModal, setShowClearModal] = useState(false);
@@ -53,7 +58,7 @@ export const ItemsView: FC = function () {
     const confirmClear = async () => {
         try {
             await IDBItemHandler.clear();
-            updateData();
+            await updateData();
             setShowClearModal(false);
         } catch (e) {
             console.log('Failed to clear', e);
@@ -75,6 +80,7 @@ export const ItemsView: FC = function () {
                         key={JSON.stringify(e)}
                         {...e}
                         eventKey={JSON.stringify(e)}
+                        {...{updateData}}
                     />
                 ))}
             </Accordion>
@@ -133,8 +139,8 @@ export const ItemsView: FC = function () {
                 </Modal.Footer>
             </Modal>
 
-            <CreateTempForm {...{ showCreateTemp, setShowCreateTemp }} />
-            <CreateOxyForm {...{ showCreateOxy, setShowCreateOxy }} />
+            <CreateTempForm {...{ showCreateTemp, setShowCreateTemp ,updateData}} />
+            <CreateOxyForm {...{ showCreateOxy, setShowCreateOxy ,updateData}} />
             <br />
 
             {dataFragment}

@@ -8,3 +8,6 @@ export const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
 };
 
 export const pageSizes = 15;
+export interface DataUpdater{
+    updateData:()=>Promise<void>;
+}
