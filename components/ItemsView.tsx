@@ -24,7 +24,7 @@ export const ItemsView: FC = function () {
     const pageOffset = pageNum * pageSizes;
 
     // how many pages?
-    const [pageCount, setPageCount] = useState(1);
+    const [pageCount, setPageCount] = useState(0);
     // fetch the number of pages when starting
     async function refreshCount() {
         const count = await IDBItemHandler.getCount();
