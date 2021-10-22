@@ -16,6 +16,7 @@ import { Item, ItemType, itemTypeMap } from '../lib/Item';
 import { useIDBFetcher } from '../lib/miscSwr';
 import { ItemView } from './ItemView';
 import { CreateTempForm } from './CreateTempForm';
+import { CreateOxyForm } from './CreateOxyForm';
 
 export const ItemsView: FC = function () {
     const { data, error, mutate } = useIDBFetcher(
@@ -30,6 +31,7 @@ export const ItemsView: FC = function () {
     const [showClearModal, setShowClearModal] = useState(false);
 
     const [showCreateTemp, setShowCreateTemp] = useState(false);
+    const [showCreateOxy, setShowCreateOxy] = useState(false);
 
     const confirmClear = async () => {
         try {
@@ -69,15 +71,6 @@ export const ItemsView: FC = function () {
                         aria-label="Buttons"
                         className="full-width spacer-top-margin"
                     >
-                        {/* <Button onClick={()=>{}}>Add</Button> */}
-                        {/* <Button
-                            onClick={() => {
-                                IDBItemHandler.add(Item(0));
-                                updateData();
-                            }}
-                        >
-                            Add
-                        </Button> */}
                         <DropdownButton as={ButtonGroup} title="Add">
                             {/* <Dropdown.Item eventKey="1">Temperature</Dropdown.Item> */}
                             <Dropdown.Item
@@ -91,9 +84,7 @@ export const ItemsView: FC = function () {
                             <Dropdown.Item
                                 eventKey="2"
                                 onClick={() => {
-                                    IDBItemHandler.add(
-                                        Item(ItemType.OXY, undefined, 98, 'no')
-                                    );
+                                    setShowCreateOxy(true);
                                 }}
                             >
                                 {itemTypeMap[ItemType.OXY]}
@@ -126,8 +117,8 @@ export const ItemsView: FC = function () {
                 </Modal.Footer>
             </Modal>
 
-            <CreateTempForm {...{showCreateTemp,setShowCreateTemp}} />
-
+            <CreateTempForm {...{ showCreateTemp, setShowCreateTemp }} />
+            <CreateOxyForm {...{ showCreateOxy, setShowCreateOxy }} />
             <br />
 
             {dataFragment}
@@ -135,5 +126,3 @@ export const ItemsView: FC = function () {
     );
 };
 // export interface K
-
-
