@@ -18,8 +18,6 @@ import { ItemView } from './ItemView';
 import { CreateTempForm } from './forms/CreateTempForm';
 import { CreateOxyForm } from './forms/CreateOxyForm';
 
-
-
 export const ItemsView: FC = function () {
     // which page am i in?
     const [pageNum, setPageNum] = useState(0);
@@ -28,14 +26,16 @@ export const ItemsView: FC = function () {
     // how many pages?
     const [pageCount, setPageCount] = useState(1);
     // fetch the number of pages when starting
-    async function refreshCount(){
+    async function refreshCount() {
         const count = await IDBItemHandler.getCount();
         // >>0 forces a convert to integer style math - much faster than rounding altho less readable
         // setPageCount(((count / pageSizes) >> 0) + 1);
-        setPageCount(Math.ceil(count / pageSizes))
+        setPageCount(Math.ceil(count / pageSizes));
     }
     useEffect(() => {
-        refreshCount().catch((e) => console.error('Error fetching page count', e));
+        refreshCount().catch((e) =>
+            console.error('Error fetching page count', e)
+        );
     }, []);
 
     // data fetching
@@ -47,7 +47,10 @@ export const ItemsView: FC = function () {
         { refreshInterval: 2000 }
     );
     // helper function
-    const updateData = async() => {await refreshCount();await mutate(undefined, true);}
+    const updateData = async () => {
+        await refreshCount();
+        await mutate(undefined, true);
+    };
 
     // delete everything modal state
     const [showClearModal, setShowClearModal] = useState(false);
@@ -80,7 +83,7 @@ export const ItemsView: FC = function () {
                         key={JSON.stringify(e)}
                         {...e}
                         eventKey={JSON.stringify(e)}
-                        {...{updateData}}
+                        {...{ updateData }}
                     />
                 ))}
             </Accordion>
@@ -139,36 +142,43 @@ export const ItemsView: FC = function () {
                 </Modal.Footer>
             </Modal>
 
-            <CreateTempForm {...{ showCreateTemp, setShowCreateTemp ,updateData}} />
-            <CreateOxyForm {...{ showCreateOxy, setShowCreateOxy ,updateData}} />
+            <CreateTempForm
+                {...{ showCreateTemp, setShowCreateTemp, updateData }}
+            />
+            <CreateOxyForm
+                {...{ showCreateOxy, setShowCreateOxy, updateData }}
+            />
             <br />
 
             {dataFragment}
 
             <Row style={{ textAlign: 'center' }} md={8}>
                 <Col md={{ span: 6, offset: 3 }}>
-                    <ButtonGroup className="spacer-top-margin-lot">
-                        <Button
-                            onClick={() => {
-                                if (pageNum > pageCount) setPageNum(0);
-                                else if (pageNum < 1) setPageNum(0);
-                                else setPageNum(pageNum - 1);
-                            }}
-                        >
-                            Prev
-                        </Button>
-                        <Button disabled>{`${
-                            pageNum + 1
-                        }/${pageCount}`}</Button>
-                        <Button
-                            onClick={() => {
-                                // increment only if lesser
-                                pageNum < (pageCount-1) && setPageNum(pageNum + 1);
-                            }}
-                        >
-                            Next
-                        </Button>
-                    </ButtonGroup>
+                    {pageCount > 0 && (
+                        <ButtonGroup className="spacer-top-margin-lot">
+                            <Button
+                                onClick={() => {
+                                    if (pageNum > pageCount) setPageNum(0);
+                                    else if (pageNum < 1) setPageNum(0);
+                                    else setPageNum(pageNum - 1);
+                                }}
+                            >
+                                Prev
+                            </Button>
+                            <Button disabled>{`${
+                                pageNum + 1
+                            }/${pageCount}`}</Button>
+                            <Button
+                                onClick={() => {
+                                    // increment only if lesser
+                                    pageNum < pageCount - 1 &&
+                                        setPageNum(pageNum + 1);
+                                }}
+                            >
+                                Next
+                            </Button>
+                        </ButtonGroup>
+                    )}
                 </Col>
             </Row>
             <div className="spacer-top-margin-lot" />
