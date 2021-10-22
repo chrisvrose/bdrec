@@ -165,7 +165,7 @@ export const ItemsView: FC = function () {
                     </ButtonGroup>
                 </Col>
             </Row>
-            <div className="spacer-top-margin" />
+            <div className="spacer-top-margin-lot" />
         </>
     );
 };
