@@ -1,4 +1,4 @@
-import type { FC, ReactChild } from 'react';
+import { FC, ReactChild, useEffect } from 'react';
 import { useState } from 'react';
 import {
     Accordion,
@@ -15,21 +15,38 @@ import { IDBItemHandler } from '../lib/idbWrapper';
 import { ItemType, itemTypeMap } from '../lib/Item';
 import { useIDBFetcher } from '../lib/miscSwr';
 import { ItemView } from './ItemView';
-import { CreateTempForm } from './CreateTempForm';
-import { CreateOxyForm } from './CreateOxyForm';
+import { CreateTempForm } from './forms/CreateTempForm';
+import { CreateOxyForm } from './forms/CreateOxyForm';
 
 export const ItemsView: FC = function () {
+    // which page am i in?
+    const [pageNum, setPageNum] = useState(0);
+    const pageOffset = pageNum * pageSizes;
+
+    // how many pages?
+    const [pageCount, setPageCount] = useState(1);
+    // fetch the number of pages when starting
+    useEffect(() => {
+        (async () => {
+            const count = await IDBItemHandler.getCount();
+            // >>0 forces a convert to integer style math - much faster than rounding altho less readable
+            setPageCount(((count / pageSizes) >> 0) + 1);
+        })().catch((e) => console.error('Error fetching page count', e));
+    }, []);
+    // data fetching
     const { data, error, mutate } = useIDBFetcher(
         'getVal',
         true,
-        undefined,
+        pageOffset,
         pageSizes,
         { refreshInterval: 2000 }
     );
+    // helper function
     const updateData = () => mutate(undefined, true);
 
+    // delete everything modal state
     const [showClearModal, setShowClearModal] = useState(false);
-
+    // create form modal states
     const [showCreateTemp, setShowCreateTemp] = useState(false);
     const [showCreateOxy, setShowCreateOxy] = useState(false);
 
@@ -121,6 +138,33 @@ export const ItemsView: FC = function () {
             <br />
 
             {dataFragment}
+
+            <Row style={{ textAlign: 'center' }} md={8}>
+                <Col md={{ span: 6, offset: 3 }}>
+                    <ButtonGroup className="spacer-top-margin">
+                        <Button
+                            onClick={() => {
+                                if (pageNum > pageCount) setPageNum(0);
+                                else if (pageNum < 1) setPageNum(0);
+                                else setPageNum(pageNum - 1);
+                            }}
+                        >
+                            Previous
+                        </Button>
+                        <Button disabled>{`${
+                            pageNum + 1
+                        }/${pageCount}`}</Button>
+                        <Button
+                            onClick={() => {
+                                // increment only if lesser
+                                pageNum < (pageCount-1) && setPageNum(pageNum + 1);
+                            }}
+                        >
+                            Next
+                        </Button>
+                    </ButtonGroup>
+                </Col>
+            </Row>
         </>
     );
 };

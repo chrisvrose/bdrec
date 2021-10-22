@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from 'react';
 const Settings: NextPage = () => {
     const [selectedC, setSelectedC] = useState(false);
+    // get from localstorage
     useEffect(() => {
         setSelectedC(
             LocalStorageWrapper.get(localStorageKeys.tempIsCelcius, 'no') ===

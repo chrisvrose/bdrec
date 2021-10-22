@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Card, Accordion, Button, Modal } from 'react-bootstrap';
 import { dateTimeFormatOptions } from '../lib/constants';
 import { IDBItemHandler } from '../lib/idbWrapper';
-import { Item, ItemValueFormat, itemTypeMap } from '../lib/Item';
+import { Item, ItemValueFormat } from '../lib/Item';
 import { ItemTypeToString } from '../lib/Item';
 
 export const ItemView: FC<Item & { eventKey: string }> = function (props) {

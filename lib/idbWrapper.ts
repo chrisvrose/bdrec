@@ -117,11 +117,27 @@ export class IDBItemHandler {
         transaction.commit();
         return items;
     }
-
+    /**
+     * Number of readings in the store
+     * @returns count of elements
+     */
+    static async getCount(){
+        const db = await this.db;
+        return db.count('readings');
+    }
+    /**
+     * Clears out all store entries
+     * @returns nothing
+     */
     static async clear() {
         const db = await this.db;
         return db.clear('readings');
     }
+    /**
+     * Delete entry at given date
+     * @param k Date
+     * @returns 
+     */
     static async delete(k: Item[typeof IDBItemHandler._keyPath]) {
         const db = await this.db;
         return db.delete(IDBItemHandler._collName, k);

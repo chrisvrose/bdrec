@@ -1,18 +1,18 @@
 import type { Dispatch, FC, SetStateAction } from "react";
 import { Modal, Form,Button } from "react-bootstrap";
-import { IDBItemHandler } from "../lib/idbWrapper";
-import { toTempMiddleFormat, Item, ItemType } from "../lib/Item";
+import { IDBItemHandler } from "../../lib/idbWrapper";
+import { toTempMiddleFormat, Item, ItemType } from "../../lib/Item";
 
-export interface CreateTempFormProps {
-    showCreateTemp: boolean;
-    setShowCreateTemp: Dispatch<SetStateAction<boolean>>;
+export interface CreateOxyFormProps {
+    showCreateOxy: boolean;
+    setShowCreateOxy: Dispatch<SetStateAction<boolean>>;
 }
-export const CreateTempForm:FC<CreateTempFormProps> = function CreateTempForm(props) {
-    const {showCreateTemp,setShowCreateTemp} = props;
+export const CreateOxyForm:FC<CreateOxyFormProps> = function CreateTempForm(props) {
+    const {showCreateOxy,setShowCreateOxy} = props;
     return <Modal
-        show={showCreateTemp}
+        show={showCreateOxy}
         onHide={() => {
-            setShowCreateTemp(false);
+            setShowCreateOxy(false);
         } }
     >
         <Form
@@ -20,38 +20,31 @@ export const CreateTempForm:FC<CreateTempFormProps> = function CreateTempForm(pr
                 e.preventDefault();
                 // little foobar
                 const formElement = e.target as any;
-                const num = Number(formElement.temp.value);
+                const num = parseInt(formElement.oxy.value);
                 const desc: string = formElement.desc.value;
                 // whether c is checked
-                const unit: boolean = formElement.unit.value === 'on' && formElement.unit[0].checked;
-                const tempMiddle = toTempMiddleFormat(num, unit);
                 // console.log('created', num, tempMiddle,desc, unit,);
                 IDBItemHandler.add(
-                    Item(ItemType.TEMP, undefined, tempMiddle, desc)
+                    Item(ItemType.OXY, undefined, num, desc)
                 );
 
-                setShowCreateTemp(false);
+                setShowCreateOxy(false);
             } }
         >
-            <Modal.Header>Add temp</Modal.Header>
+            <Modal.Header>Add Oxygen readings</Modal.Header>
             <Modal.Body>
                 <Form.Group>
-                    <Form.Label>Temperature</Form.Label>
+                    <Form.Label>Blood Oxygen Levels</Form.Label>
                     <Form.Control
-                        placeholder="Temperature"
+                        placeholder="SpO2 reading"
                         type="number"
-                        name="temp"
+                        name="oxy"
                         min={0}
-                        max={200}
-                        step={0.01} />
+                        max={100}
+                        />
                 </Form.Group>
 
-                <Form.Group>
-                    <Form.Label>Unit</Form.Label><br />
-                    <Form.Check inline type="radio" name="unit" label="C" />
-                    <Form.Check inline type="radio" name="unit" label="F" />
-
-                </Form.Group>
+                
                 <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Description</Form.Label>
                     <Form.Control
@@ -65,7 +58,7 @@ export const CreateTempForm:FC<CreateTempFormProps> = function CreateTempForm(pr
             <Modal.Footer>
                 <Button
                     variant="secondary"
-                    onClick={() => setShowCreateTemp(false)}
+                    onClick={() => setShowCreateOxy(false)}
                 >
                     Cancel
                 </Button>
