@@ -1,5 +1,5 @@
 import { DBSchema, IDBPDatabase, IDBPObjectStore, openDB } from 'idb';
-import { Item } from './Item';
+import { Item } from '../Item';
 /**
  * Convenience wrapper type
  */

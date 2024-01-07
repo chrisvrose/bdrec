@@ -1,6 +1,6 @@
 
 
-export enum localStorageKeys{
+export enum localStorageKeys {
     tempIsCelcius,
 }
 

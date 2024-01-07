@@ -1,13 +1,14 @@
-import type{ FC } from 'react';
+import type { FC } from 'react';
 import { useState } from 'react';
 import { Card, Accordion, Button, Modal } from 'react-bootstrap';
 import { dateTimeFormatOptions } from '../lib/constants';
-import { IDBItemHandler } from '../lib/idbWrapper';
-import { Item, ItemValueFormat } from '../lib/Item';
-import { ItemTypeToString } from '../lib/Item';
+import { IDBItemHandler } from '../lib/db/idbWrapper';
+import { Item, ItemValueFormat, itemTypeToString } from '../lib/Item';
 
-export const ItemView: FC<Item & { eventKey: string,updateData:()=>Promise<void> }> = function (props) {
-    const { date, eventKey, itemType, desc, updateData} = props;
+export const ItemView: FC<
+    Item & { eventKey: string; updateData: () => Promise<void> }
+> = function (props) {
+    const { date, eventKey, itemType, desc, updateData } = props;
     const [showDelete, setShowDelete] = useState(false);
     const setHideDeleteModal = () => setShowDelete(false);
     const setShowDeleteModal = () => setShowDelete(true);
@@ -27,7 +28,7 @@ export const ItemView: FC<Item & { eventKey: string,updateData:()=>Promise<void>
                     {`${date.toLocaleString(
                         'en-us',
                         dateTimeFormatOptions
-                    )} ${ItemTypeToString(itemType)} - ${ItemValueFormat(
+                    )} ${itemTypeToString(itemType)} - ${ItemValueFormat(
                         props
                     )}`}
                 </Accordion.Toggle>
@@ -35,7 +36,7 @@ export const ItemView: FC<Item & { eventKey: string,updateData:()=>Promise<void>
                 <Accordion.Collapse eventKey={eventKey}>
                     <Card.Body>
                         <Card.Text>
-                            {ItemTypeToString(itemType)}
+                            {itemTypeToString(itemType)}
                             {` - `}
                             {ItemValueFormat(props)}
                             <br />

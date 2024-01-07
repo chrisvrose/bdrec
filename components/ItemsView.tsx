@@ -1,5 +1,4 @@
-import { FC, ReactChild, useEffect } from 'react';
-import { useState } from 'react';
+import { FC, ReactChild, useEffect, useState } from 'react';
 import {
     Accordion,
     Button,
@@ -11,8 +10,8 @@ import {
     Row,
 } from 'react-bootstrap';
 import { pageSizes } from '../lib/constants';
-import { IDBItemHandler } from '../lib/idbWrapper';
-import { ItemType, itemTypeMap } from '../lib/Item';
+import { IDBItemHandler } from '../lib/db/idbWrapper';
+import { ItemType, itemTypeToString } from '../lib/Item';
 import { useIDBFetcher } from '../lib/miscSwr';
 import { ItemView } from './ItemView';
 import { CreateTempForm } from './forms/CreateTempForm';
@@ -104,7 +103,7 @@ export const ItemsView: FC = function () {
                                     setShowCreateTemp(true);
                                 }}
                             >
-                                {itemTypeMap[ItemType.TEMP]}
+                                {itemTypeToString(ItemType.TEMP)}
                             </Dropdown.Item>
                             <Dropdown.Item
                                 eventKey="2"
@@ -112,7 +111,7 @@ export const ItemsView: FC = function () {
                                     setShowCreateOxy(true);
                                 }}
                             >
-                                {itemTypeMap[ItemType.OXY]}
+                                {itemTypeToString(ItemType.OXY)}
                             </Dropdown.Item>
                         </DropdownButton>
                         {/* <br /> */}

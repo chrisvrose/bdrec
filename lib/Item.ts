@@ -1,4 +1,4 @@
-import { localStorageKeys, LocalStorageWrapper } from './localStorageWrapper';
+import { localStorageKeys, LocalStorageWrapper } from './db/localStorageWrapper';
 
 export enum ItemType {
     TEMP,
@@ -11,7 +11,7 @@ export enum ItemType {
 /**
  * String representation of the entire ordeal
  */
-export const itemTypeMap: { [k in ItemType]: string } = {
+const itemTypeMap: { [k in ItemType]: string } = {
     [ItemType.TEMP]: 'Temperature',
     [ItemType.OXY]: 'Blood Oxygen Levels',
     [ItemType.PULSE]: 'Pulse',
@@ -24,7 +24,7 @@ export const itemTypeMap: { [k in ItemType]: string } = {
  * @param x
  * @returns
  */
-export function ItemTypeToString(x: ItemType) {
+export function itemTypeToString(x: ItemType) {
     return itemTypeMap[x];
 }
 
@@ -55,9 +55,10 @@ export function toTempMiddleFormat(x: number, isCelcius: boolean = true) {
 /** Format item value */
 export function ItemValueFormat(x: Item) {
     switch (x.itemType) {
-        case ItemType.TEMP:
+        case ItemType.TEMP: {
             const { unitString, num } = tempUnitConvert(x.value);
             return `${num.toFixed(2)} ${unitString}`;
+        }
         case ItemType.BP:
             return `${x.value} mm Hg.`;
         case ItemType.OXY:
@@ -70,12 +71,12 @@ export function ItemValueFormat(x: Item) {
 }
 
 /** Item for IndexedDB */
-export interface Item {
+export type Item = {
     itemType: ItemType;
     date: Date;
     value: number;
     desc: string;
-}
+};
 /** Making an item */
 export function Item(
     itemType: ItemType = ItemType.TEMP,

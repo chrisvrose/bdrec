@@ -1,12 +1,12 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
-import type { DataUpdater } from '../../lib/constants';
-import { IDBItemHandler } from '../../lib/idbWrapper';
+import { IDBItemHandler } from '../../lib/db/idbWrapper';
 import { toTempMiddleFormat, Item, ItemType } from '../../lib/Item';
 
-export interface CreateTempFormProps extends DataUpdater {
+export interface CreateTempFormProps  {
     showCreateTemp: boolean;
     setShowCreateTemp: Dispatch<SetStateAction<boolean>>;
+    updateData: ()=>Promise<void>;
 }
 export const CreateTempForm: FC<CreateTempFormProps> = function CreateTempForm(
     props

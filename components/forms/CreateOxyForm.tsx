@@ -1,17 +1,17 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
-import type { DataUpdater } from '../../lib/constants';
-import { IDBItemHandler } from '../../lib/idbWrapper';
+import { IDBItemHandler } from '../../lib/db/idbWrapper';
 import { Item, ItemType } from '../../lib/Item';
 
-export interface CreateOxyFormProps extends DataUpdater {
+export interface CreateOxyFormProps {
     showCreateOxy: boolean;
     setShowCreateOxy: Dispatch<SetStateAction<boolean>>;
+    updateData: () => Promise<void>;
 }
 export const CreateOxyForm: FC<CreateOxyFormProps> = function CreateTempForm(
     props
 ) {
-    const { showCreateOxy, setShowCreateOxy,updateData } = props;
+    const { showCreateOxy, setShowCreateOxy, updateData } = props;
     return (
         <Modal
             show={showCreateOxy}
