@@ -61,7 +61,7 @@ export class IDBItemHandler {
      * @param item
      * @returns New index date
      */
-    static async edit(key: Item[typeof IDBItemHandler._keyPath], item: Item) {
+    static async edit(key: Item[typeof IDBItemHandler._keyPath] | undefined, item: Item) {
         const db = await this.db;
         return db.put(IDBItemHandler._collName, item, key);
     }
