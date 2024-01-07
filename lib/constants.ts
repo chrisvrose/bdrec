@@ -27,11 +27,6 @@ export const formStrings = {
         addLabel: '',
         addPlaceHolder: itemTypeToString(ItemType.PULSE),
     },
-    [ItemType.BP]: {
-        addButtonText: 'Add Blood Pressure Reading',
-        addLabel: '',
-        addPlaceHolder: itemTypeToString(ItemType.BP),
-    },
     [ItemType.SL]: {
         addButtonText: 'Add Blood Sugar Reading',
         addLabel: '',

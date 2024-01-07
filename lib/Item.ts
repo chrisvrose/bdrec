@@ -4,7 +4,6 @@ export enum ItemType {
     TEMP,
     OXY,
     PULSE,
-    BP,
     SL,
 }
 
@@ -15,7 +14,6 @@ const itemTypeMap: { [k in ItemType]: string } = {
     [ItemType.TEMP]: 'Temperature',
     [ItemType.OXY]: 'Blood Oxygen Level',
     [ItemType.PULSE]: 'Pulse',
-    [ItemType.BP]: 'Blood Pressure',
     [ItemType.SL]: 'Blood Glucose',
 };
 
@@ -59,8 +57,6 @@ export function ItemValueFormat(x: Item) {
             const { unitString, num } = tempUnitConvert(x.value);
             return `${num.toFixed(2)} ${unitString}`;
         }
-        case ItemType.BP:
-            return `${x.value} mm Hg.`;
         case ItemType.OXY:
             return `${x.value}% SpO2`;
         case ItemType.PULSE:
