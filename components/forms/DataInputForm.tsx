@@ -28,8 +28,8 @@ export const DataInputForm: FC<OxyFormProps> = function ({ showCreateForm,itemTy
                     const num = parseInt(formElement.numinput.value);
                     const desc: string = formElement.desc.value;
                     // whether c is checked
-                    // console.log('created', num, tempMiddle,desc, unit,);
-                    IDBItemHandler.add(Item(itemType, undefined, num, desc));
+                    const item = Item(itemType, undefined, num, desc);
+                    IDBItemHandler.add(item);
 
                     setShowCreateForm(false);
                     await updateData();
