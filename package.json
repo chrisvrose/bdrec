@@ -29,7 +29,8 @@
         "tabWidth": 4,
         "arrowParens": "always",
         "semi": true,
-        "singleQuote": true
+        "singleQuote": true,
+        "printWidth": 120
     },
     "devDependencies": {
         "@types/react": "17.0.21",

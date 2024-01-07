@@ -15,7 +15,7 @@ import { ItemType, itemTypeToString } from '../lib/Item';
 import { useIDBFetcher } from '../lib/miscSwr';
 import { ItemView } from './ItemView';
 import { CreateTempForm } from './forms/CreateTempForm';
-import { CreateOxyForm } from './forms/CreateOxyForm';
+import { OxyForm } from './forms/OxyForm';
 
 export const ItemsView: FC = function () {
     // which page am i in?
@@ -142,7 +142,7 @@ export const ItemsView: FC = function () {
             <CreateTempForm
                 {...{ showCreateTemp, setShowCreateTemp, updateData }}
             />
-            <CreateOxyForm
+            <OxyForm
                 {...{ showCreateOxy, setShowCreateOxy, updateData }}
             />
             <br />

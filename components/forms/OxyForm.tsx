@@ -3,15 +3,12 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { IDBItemHandler } from '../../lib/db/idbWrapper';
 import { Item, ItemType } from '../../lib/Item';
 
-export interface CreateOxyFormProps {
+export interface OxyFormProps {
     showCreateOxy: boolean;
     setShowCreateOxy: Dispatch<SetStateAction<boolean>>;
     updateData: () => Promise<void>;
 }
-export const CreateOxyForm: FC<CreateOxyFormProps> = function CreateTempForm(
-    props
-) {
-    const { showCreateOxy, setShowCreateOxy, updateData } = props;
+export const OxyForm: FC<OxyFormProps> = function ({ showCreateOxy, setShowCreateOxy, updateData }) {
     return (
         <Modal
             show={showCreateOxy}
@@ -28,9 +25,7 @@ export const CreateOxyForm: FC<CreateOxyFormProps> = function CreateTempForm(
                     const desc: string = formElement.desc.value;
                     // whether c is checked
                     // console.log('created', num, tempMiddle,desc, unit,);
-                    IDBItemHandler.add(
-                        Item(ItemType.OXY, undefined, num, desc)
-                    );
+                    IDBItemHandler.add(Item(ItemType.OXY, undefined, num, desc));
 
                     setShowCreateOxy(false);
                     await updateData();
@@ -40,31 +35,17 @@ export const CreateOxyForm: FC<CreateOxyFormProps> = function CreateTempForm(
                 <Modal.Body>
                     <Form.Group>
                         <Form.Label>Blood Oxygen Levels</Form.Label>
-                        <Form.Control
-                            placeholder="SpO2 reading"
-                            type="number"
-                            name="oxy"
-                            min={0}
-                            max={100}
-                        />
+                        <Form.Control placeholder="SpO2 reading" type="number" name="oxy" min={0} max={100} />
                     </Form.Group>
 
                     <Form.Group controlId="exampleForm.ControlTextarea1">
                         <Form.Label>Description</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
-                            placeholder="Description(Optional)"
-                            name="desc"
-                        />
+                        <Form.Control as="textarea" rows={3} placeholder="Description(Optional)" name="desc" />
                     </Form.Group>
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button
-                        variant="secondary"
-                        onClick={() => setShowCreateOxy(false)}
-                    >
+                    <Button variant="secondary" onClick={() => setShowCreateOxy(false)}>
                         Cancel
                     </Button>
                     <Button variant="primary" type="submit">
