@@ -59,6 +59,16 @@ export class IDBItemHandler {
         const db = await this.db;
         return db.add(IDBItemHandler._collName, jsonObject as any);
     }
+    /**
+     * Edit an existing value
+     * @param key 
+     * @param item 
+     * @returns New index date
+     */
+    static async edit(key:Item[typeof IDBItemHandler._keyPath],item:Item){
+        const db = await this.db;
+        return db.put(IDBItemHandler._collName, item,key);
+    }
 
     /**
      * Get item in db as per key
