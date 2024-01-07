@@ -4,7 +4,7 @@ import { Container, Form } from 'react-bootstrap';
 import {
     localStorageKeys,
     LocalStorageWrapper,
-} from '../lib/localStorageWrapper';
+} from '../lib/db/localStorageWrapper';
 import { useEffect, useState } from 'react';
 const Settings: NextPage = () => {
     const [selectedC, setSelectedC] = useState(false);
