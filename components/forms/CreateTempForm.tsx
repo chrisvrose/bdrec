@@ -31,7 +31,6 @@ export const CreateTempForm: FC<CreateTempFormProps> = function CreateTempForm(
                         formElement.unit.value === 'on' &&
                         formElement.unit[0].checked;
                     const tempMiddle = toTempMiddleFormat(num, unit);
-                    // console.log('created', num, tempMiddle,desc, unit,);
                     await IDBItemHandler.add(
                         Item(ItemType.TEMP, undefined, tempMiddle, desc)
                     );
