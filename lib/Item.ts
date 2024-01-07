@@ -13,7 +13,7 @@ export enum ItemType {
  */
 const itemTypeMap: { [k in ItemType]: string } = {
     [ItemType.TEMP]: 'Temperature',
-    [ItemType.OXY]: 'Blood Oxygen Levels',
+    [ItemType.OXY]: 'Blood Oxygen Level',
     [ItemType.PULSE]: 'Pulse',
     [ItemType.BP]: 'Blood Pressure',
     [ItemType.SL]: 'Blood Glucose',

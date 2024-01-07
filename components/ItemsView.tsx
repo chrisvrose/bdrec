@@ -14,14 +14,13 @@ import { IDBItemHandler } from '../lib/db/idbWrapper';
 import { ItemType, itemTypeToString } from '../lib/Item';
 import { useIDBFetcher } from '../lib/miscSwr';
 import { ItemView } from './ItemView';
-import { CreateTempForm } from './forms/CreateTempForm';
-import { OxyForm } from './forms/OxyForm';
+import { DataInputForm } from './forms/DataInputForm';
 
 export const ItemsView: FC = function () {
     // which page am i in?
     const [pageNum, setPageNum] = useState(0);
     const pageOffset = pageNum * pageSizes;
-
+    
     // how many pages?
     const [pageCount, setPageCount] = useState(0);
     // fetch the number of pages when starting
@@ -51,9 +50,10 @@ export const ItemsView: FC = function () {
 
     // delete everything modal state
     const [showClearModal, setShowClearModal] = useState(false);
+    // what item type
+    const [formItemType, setFormItemType] = useState(ItemType.TEMP);
     // create form modal states
-    const [showCreateTemp, setShowCreateTemp] = useState(false);
-    const [showCreateOxy, setShowCreateOxy] = useState(false);
+    const [showCreateForm, setShowCreateForm] = useState(false);
 
     const confirmClear = async () => {
         try {
@@ -98,7 +98,8 @@ export const ItemsView: FC = function () {
                             <Dropdown.Item
                                 eventKey="1"
                                 onClick={() => {
-                                    setShowCreateTemp(true);
+                                    setFormItemType(ItemType.TEMP)
+                                    setShowCreateForm(true);
                                 }}
                             >
                                 {itemTypeToString(ItemType.TEMP)}
@@ -106,7 +107,8 @@ export const ItemsView: FC = function () {
                             <Dropdown.Item
                                 eventKey="2"
                                 onClick={() => {
-                                    setShowCreateOxy(true);
+                                    setFormItemType(ItemType.OXY)
+                                    setShowCreateForm(true);
                                 }}
                             >
                                 {itemTypeToString(ItemType.OXY)}
@@ -139,11 +141,8 @@ export const ItemsView: FC = function () {
                 </Modal.Footer>
             </Modal>
 
-            <CreateTempForm
-                {...{ showCreateTemp, setShowCreateTemp, updateData }}
-            />
-            <OxyForm
-                {...{ showCreateOxy, setShowCreateOxy, updateData }}
+            <DataInputForm
+                {...{ itemType:formItemType,showCreateForm, setShowCreateForm, updateData }}
             />
             <br />
 

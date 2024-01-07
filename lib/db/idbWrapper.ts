@@ -1,4 +1,4 @@
-import { DBSchema, IDBPDatabase, IDBPObjectStore, openDB } from 'idb';
+import { DBSchema, IDBPDatabase, openDB } from 'idb';
 import { Item } from '../Item';
 /**
  * Convenience wrapper type
@@ -22,8 +22,6 @@ export class IDBItemHandler {
     /**Internal Reference (lazily created) do not use directly */
     private static _db: IDBPDatabase<ItemSchema> | null = null;
 
-    constructor() {}
-
     /** create db instance lazily , use this to get db */
     private static get db(): Promise<IDBPDatabase<ItemSchema>> {
         return this.createDbIfNotExists();
@@ -37,9 +35,7 @@ export class IDBItemHandler {
             (await openDB(IDBItemHandler._dbName, 1, {
                 upgrade: (db, oldv, newv, transaction) => {
                     // create a collection if it doesnt exist
-                    if (
-                        !db.objectStoreNames.contains(IDBItemHandler._collName)
-                    ) {
+                    if (!db.objectStoreNames.contains(IDBItemHandler._collName)) {
                         db.createObjectStore(IDBItemHandler._collName, {
                             keyPath: IDBItemHandler._keyPath,
                         });
@@ -61,13 +57,13 @@ export class IDBItemHandler {
     }
     /**
      * Edit an existing value
-     * @param key 
-     * @param item 
+     * @param key
+     * @param item
      * @returns New index date
      */
-    static async edit(key:Item[typeof IDBItemHandler._keyPath],item:Item){
+    static async edit(key: Item[typeof IDBItemHandler._keyPath], item: Item) {
         const db = await this.db;
-        return db.put(IDBItemHandler._collName, item,key);
+        return db.put(IDBItemHandler._collName, item, key);
     }
 
     /**
@@ -77,7 +73,6 @@ export class IDBItemHandler {
      */
     static async get(x: Item[typeof IDBItemHandler._keyPath]) {
         const db = await this.db;
-
         return db.get(IDBItemHandler._collName, x);
     }
 
@@ -97,18 +92,11 @@ export class IDBItemHandler {
      * @param length Number of items to return
      * @returns set of items
      */
-    static async getFromOffset(
-        from: number,
-        length?: number,
-        reverse: boolean = false
-    ) {
+    static async getFromOffset(from: number, length?: number, reverse: boolean = false) {
         // create a transaction
         const transaction = (await this.db).transaction('readings', 'readonly');
         // open a cursor for streamed reading (open reverse if arg is true)
-        let cursor = await transaction.store.openCursor(
-            undefined,
-            reverse ? 'prev' : 'next'
-        );
+        let cursor = await transaction.store.openCursor(undefined, reverse ? 'prev' : 'next');
 
         // advance scroll and set it (if already empty its forwarded to null)
         // do this only for positive ints
@@ -131,7 +119,7 @@ export class IDBItemHandler {
      * Number of readings in the store
      * @returns count of elements
      */
-    static async getCount(){
+    static async getCount() {
         const db = await this.db;
         return db.count('readings');
     }
@@ -146,7 +134,7 @@ export class IDBItemHandler {
     /**
      * Delete entry at given date
      * @param k Date
-     * @returns 
+     * @returns
      */
     static async delete(k: Item[typeof IDBItemHandler._keyPath]) {
         const db = await this.db;
@@ -158,10 +146,7 @@ export class IDBItemHandler {
  * Classical exception
  */
 export class DBException {
-    constructor(
-        private msg: string,
-        private typeException: 'E' | 'W' | 'I' | '?' = 'E'
-    ) {}
+    constructor(private msg: string, private typeException: 'E' | 'W' | 'I' | '?' = 'E') {}
     toString() {
         return this.typeException + ':' + this.msg;
     }

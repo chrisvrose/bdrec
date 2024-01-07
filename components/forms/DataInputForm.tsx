@@ -1,41 +1,45 @@
-import type { Dispatch, FC, SetStateAction } from 'react';
+import { Dispatch,  FC, SetStateAction } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { IDBItemHandler } from '../../lib/db/idbWrapper';
 import { Item, ItemType } from '../../lib/Item';
+import { formStrings } from '../../lib/constants';
 
 export interface OxyFormProps {
-    showCreateOxy: boolean;
-    setShowCreateOxy: Dispatch<SetStateAction<boolean>>;
+    showCreateForm: boolean;
+    itemType: ItemType;
+    existingItem?: Item;
+    setShowCreateForm: Dispatch<SetStateAction<boolean>>;
     updateData: () => Promise<void>;
 }
-export const OxyForm: FC<OxyFormProps> = function ({ showCreateOxy, setShowCreateOxy, updateData }) {
+export const DataInputForm: FC<OxyFormProps> = function ({ showCreateForm,itemType, existingItem, setShowCreateForm, updateData }) {
     return (
         <Modal
-            show={showCreateOxy}
+            show={showCreateForm}
             onHide={() => {
-                setShowCreateOxy(false);
+                setShowCreateForm(false);
             }}
         >
             <Form
                 onSubmit={async (e) => {
                     e.preventDefault();
+                    
                     // little foobar
                     const formElement = e.target as any;
-                    const num = parseInt(formElement.oxy.value);
+                    const num = parseInt(formElement.numinput.value);
                     const desc: string = formElement.desc.value;
                     // whether c is checked
                     // console.log('created', num, tempMiddle,desc, unit,);
                     IDBItemHandler.add(Item(ItemType.OXY, undefined, num, desc));
 
-                    setShowCreateOxy(false);
+                    setShowCreateForm(false);
                     await updateData();
                 }}
             >
-                <Modal.Header>Add Oxygen readings</Modal.Header>
+                <Modal.Header>{formStrings[itemType].addButtonText}</Modal.Header>
                 <Modal.Body>
                     <Form.Group>
-                        <Form.Label>Blood Oxygen Levels</Form.Label>
-                        <Form.Control placeholder="SpO2 reading" type="number" name="oxy" min={0} max={100} />
+                        <Form.Label>{formStrings[itemType].addLabel}</Form.Label>
+                        <Form.Control placeholder={formStrings[itemType].addPlaceHolder} type="number" name="numinput" min={0} max={100} value={existingItem?.value} />
                     </Form.Group>
 
                     <Form.Group controlId="exampleForm.ControlTextarea1">
@@ -45,7 +49,7 @@ export const OxyForm: FC<OxyFormProps> = function ({ showCreateOxy, setShowCreat
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowCreateOxy(false)}>
+                    <Button variant="secondary" onClick={() => setShowCreateForm(false)}>
                         Cancel
                     </Button>
                     <Button variant="primary" type="submit">
