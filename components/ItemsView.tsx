@@ -27,8 +27,6 @@ export const ItemsView: FC = function () {
     // fetch the number of pages when starting
     async function refreshCount() {
         const count = await IDBItemHandler.getCount();
-        // >>0 forces a convert to integer style math - much faster than rounding altho less readable
-        // setPageCount(((count / pageSizes) >> 0) + 1);
         setPageCount(Math.ceil(count / pageSizes));
     }
     useEffect(() => {
