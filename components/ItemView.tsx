@@ -5,10 +5,17 @@ import { dateTimeFormatOptions } from '../lib/constants';
 import { IDBItemHandler } from '../lib/db/idbWrapper';
 import { Item, ItemValueFormat, itemTypeToString } from '../lib/Item';
 
-export const ItemView: FC<
-    Item & { eventKey: string; updateData: () => Promise<void> }
-> = function (props) {
-    const { date, eventKey, itemType, desc, updateData } = props;
+export type ItemViewProps = {
+    item: Item;
+    eventKey: string;
+    updateData: () => Promise<void>;
+};
+
+export const ItemView: FC<ItemViewProps> = function (props) {
+    const { item, eventKey, updateData } = props;
+
+    const { date, itemType, desc } = item;
+
     const [showDelete, setShowDelete] = useState(false);
     const setHideDeleteModal = () => setShowDelete(false);
     const setShowDeleteModal = () => setShowDelete(true);
@@ -25,12 +32,9 @@ export const ItemView: FC<
         <>
             <Card bg="dark">
                 <Accordion.Toggle as={Card.Header} eventKey={eventKey}>
-                    {`${date.toLocaleString(
-                        'en-us',
-                        dateTimeFormatOptions
-                    )} ${itemTypeToString(itemType)} - ${ItemValueFormat(
-                        props
-                    )}`}
+                    {`${date.toLocaleString('en-us', dateTimeFormatOptions)} ${itemTypeToString(
+                        itemType
+                    )} - ${ItemValueFormat(item)}`}
                 </Accordion.Toggle>
 
                 <Accordion.Collapse eventKey={eventKey}>
@@ -38,7 +42,7 @@ export const ItemView: FC<
                         <Card.Text>
                             {itemTypeToString(itemType)}
                             {` - `}
-                            {ItemValueFormat(props)}
+                            {ItemValueFormat(item)}
                             <br />
                             {desc}
                         </Card.Text>

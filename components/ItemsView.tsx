@@ -1,17 +1,8 @@
 import { FC, ReactChild, useEffect, useState } from 'react';
-import {
-    Accordion,
-    Button,
-    ButtonGroup,
-    Col,
-    Dropdown,
-    DropdownButton,
-    Modal,
-    Row,
-} from 'react-bootstrap';
+import { Accordion, Button, ButtonGroup, Col, Dropdown, DropdownButton, Modal, Row } from 'react-bootstrap';
 import { pageSizes } from '../lib/constants';
 import { IDBItemHandler } from '../lib/db/idbWrapper';
-import { ItemType, itemTypeToString } from '../lib/Item';
+import { Item, ItemType, itemTypeToString } from '../lib/Item';
 import { useIDBFetcher } from '../lib/miscSwr';
 import { ItemView } from './ItemView';
 import { DataInputForm } from './forms/DataInputForm';
@@ -20,7 +11,7 @@ export const ItemsView: FC = function () {
     // which page am i in?
     const [pageNum, setPageNum] = useState(0);
     const pageOffset = pageNum * pageSizes;
-    
+
     // how many pages?
     const [pageCount, setPageCount] = useState(0);
     // fetch the number of pages when starting
@@ -29,19 +20,11 @@ export const ItemsView: FC = function () {
         setPageCount(Math.ceil(count / pageSizes));
     }
     useEffect(() => {
-        refreshCount().catch((e) =>
-            console.error('Error fetching page count', e)
-        );
+        refreshCount().catch((e) => console.error('Error fetching page count', e));
     }, []);
 
     // data fetching
-    const { data, error, mutate } = useIDBFetcher(
-        'getVal',
-        true,
-        pageOffset,
-        pageSizes,
-        { refreshInterval: 2000 }
-    );
+    const { data, error, mutate } = useIDBFetcher('getVal', true, pageOffset, pageSizes, { refreshInterval: 2000 });
     // helper function
     const updateData = async () => {
         await refreshCount();
@@ -54,6 +37,7 @@ export const ItemsView: FC = function () {
     const [formItemType, setFormItemType] = useState(ItemType.TEMP);
     // create form modal states
     const [showCreateForm, setShowCreateForm] = useState(false);
+    const [selectedEditItem, setSelectedEditItem] = useState<Item | null>(null);
 
     const confirmClear = async () => {
         try {
@@ -75,12 +59,12 @@ export const ItemsView: FC = function () {
     } else
         dataFragment = (
             <Accordion>
-                {data.map((e) => (
+                {data.map((item) => (
                     <ItemView
-                        key={JSON.stringify(e)}
-                        {...e}
-                        eventKey={JSON.stringify(e)}
-                        {...{ updateData }}
+                        key={JSON.stringify(item)}
+                        item={item}
+                        eventKey={JSON.stringify(item)}
+                        updateData={updateData}
                     />
                 ))}
             </Accordion>
@@ -90,15 +74,12 @@ export const ItemsView: FC = function () {
         <>
             <Row style={{ textAlign: 'center' }} md={8}>
                 <Col md={{ span: 6, offset: 3 }}>
-                    <ButtonGroup
-                        aria-label="Buttons"
-                        className="full-width spacer-top-margin"
-                    >
+                    <ButtonGroup aria-label="Buttons" className="full-width spacer-top-margin">
                         <DropdownButton as={ButtonGroup} title="Add">
                             <Dropdown.Item
                                 eventKey="1"
                                 onClick={() => {
-                                    setFormItemType(ItemType.TEMP)
+                                    setFormItemType(ItemType.TEMP);
                                     setShowCreateForm(true);
                                 }}
                             >
@@ -107,7 +88,7 @@ export const ItemsView: FC = function () {
                             <Dropdown.Item
                                 eventKey="2"
                                 onClick={() => {
-                                    setFormItemType(ItemType.OXY)
+                                    setFormItemType(ItemType.OXY);
                                     setShowCreateForm(true);
                                 }}
                             >
@@ -116,23 +97,15 @@ export const ItemsView: FC = function () {
                         </DropdownButton>
                         {/* <br /> */}
                         <Button onClick={() => updateData()}>Refresh </Button>
-                        <Button onClick={() => setShowClearModal(true)}>
-                            Clear
-                        </Button>
+                        <Button onClick={() => setShowClearModal(true)}>Clear</Button>
                     </ButtonGroup>
                 </Col>
             </Row>
-            <Modal
-                show={showClearModal}
-                onHide={() => setShowClearModal(false)}
-            >
+            <Modal show={showClearModal} onHide={() => setShowClearModal(false)}>
                 <Modal.Header>Clear?</Modal.Header>
                 <Modal.Body>Confirm Clearing all entries?</Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        variant="secondary"
-                        onClick={() => setShowClearModal(false)}
-                    >
+                    <Button variant="secondary" onClick={() => setShowClearModal(false)}>
                         Cancel
                     </Button>
                     <Button variant="primary" onClick={confirmClear}>
@@ -141,9 +114,7 @@ export const ItemsView: FC = function () {
                 </Modal.Footer>
             </Modal>
 
-            <DataInputForm
-                {...{ itemType:formItemType,showCreateForm, setShowCreateForm, updateData }}
-            />
+            <DataInputForm {...{ itemType: formItemType, showCreateForm, setShowCreateForm, updateData }} />
             <br />
 
             {dataFragment}
@@ -161,14 +132,11 @@ export const ItemsView: FC = function () {
                             >
                                 Prev
                             </Button>
-                            <Button disabled>{`${
-                                pageNum + 1
-                            }/${pageCount}`}</Button>
+                            <Button disabled>{`${pageNum + 1}/${pageCount}`}</Button>
                             <Button
                                 onClick={() => {
                                     // increment only if lesser
-                                    pageNum < pageCount - 1 &&
-                                        setPageNum(pageNum + 1);
+                                    pageNum < pageCount - 1 && setPageNum(pageNum + 1);
                                 }}
                             >
                                 Next
