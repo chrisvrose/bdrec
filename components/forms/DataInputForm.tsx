@@ -1,4 +1,4 @@
-import { Dispatch,  FC, SetStateAction } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { IDBItemHandler } from '../../lib/db/idbWrapper';
 import { Item, ItemType } from '../../lib/Item';
@@ -7,22 +7,48 @@ import { formStrings } from '../../lib/constants';
 export interface OxyFormProps {
     showCreateForm: boolean;
     itemType: ItemType;
-    existingItem?: Item;
+    existingItem: Item | null;
+    setExistingItem: Dispatch<SetStateAction<Item | null>>;
     setShowCreateForm: Dispatch<SetStateAction<boolean>>;
     updateData: () => Promise<void>;
 }
-export const DataInputForm: FC<OxyFormProps> = function ({ showCreateForm,itemType, existingItem, setShowCreateForm, updateData }) {
+export const DataInputForm: FC<OxyFormProps> = function ({
+    showCreateForm,
+    itemType,
+    existingItem,
+    setShowCreateForm,
+    setExistingItem,
+    updateData,
+}) {
+    const formRef = useRef<HTMLFormElement>(null);
+    useEffect(() => {
+        if (!showCreateForm) {
+            // if hidden, clear it all?
+            setExistingItem(null);
+        } else if (existingItem !== null) {
+            //1. load all text
+            if (formRef.current != null) {
+                formRef.current.numinput.value = existingItem.value;
+                formRef.current.desc.value = existingItem.desc;
+            }
+            if (itemType !== existingItem.itemType) {
+                console.warn('Detected mismatch, please report', itemType, existingItem);
+            }
+        }
+    }, [showCreateForm]);
     return (
         <Modal
             show={showCreateForm}
             onHide={() => {
+                setExistingItem(null);
                 setShowCreateForm(false);
             }}
         >
             <Form
+                ref={formRef}
                 onSubmit={async (e) => {
                     e.preventDefault();
-                    
+
                     // little foobar
                     const formElement = e.target as any;
                     const num = parseInt(formElement.numinput.value);
@@ -39,7 +65,14 @@ export const DataInputForm: FC<OxyFormProps> = function ({ showCreateForm,itemTy
                 <Modal.Body>
                     <Form.Group>
                         <Form.Label>{formStrings[itemType].addLabel}</Form.Label>
-                        <Form.Control placeholder={formStrings[itemType].addPlaceHolder} type="number" name="numinput" min={0} max={100} value={existingItem?.value} />
+                        <Form.Control
+                            placeholder={formStrings[itemType].addPlaceHolder}
+                            type="number"
+                            name="numinput"
+                            min={0}
+                            max={100}
+                            value={existingItem?.value}
+                        />
                     </Form.Group>
 
                     <Form.Group controlId="exampleForm.ControlTextarea1">
@@ -49,7 +82,12 @@ export const DataInputForm: FC<OxyFormProps> = function ({ showCreateForm,itemTy
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowCreateForm(false)}>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            setShowCreateForm(false);
+                        }}
+                    >
                         Cancel
                     </Button>
                     <Button variant="primary" type="submit">

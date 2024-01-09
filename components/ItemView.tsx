@@ -1,6 +1,6 @@
-import type { FC } from 'react';
+import type { Dispatch, FC, SetStateAction } from 'react';
 import { useState } from 'react';
-import { Card, Accordion, Button, Modal } from 'react-bootstrap';
+import { Card, Accordion, Button, Modal, ButtonGroup } from 'react-bootstrap';
 import { dateTimeFormatOptions } from '../lib/constants';
 import { IDBItemHandler } from '../lib/db/idbWrapper';
 import { Item, ItemValueFormat, itemTypeToString } from '../lib/Item';
@@ -8,11 +8,13 @@ import { Item, ItemValueFormat, itemTypeToString } from '../lib/Item';
 export type ItemViewProps = {
     item: Item;
     eventKey: string;
+    setSelectedEditItem: Dispatch<SetStateAction<Item | null>>;
+    setShowEditModal: Dispatch<SetStateAction<boolean>>;
     updateData: () => Promise<void>;
 };
 
 export const ItemView: FC<ItemViewProps> = function (props) {
-    const { item, eventKey, updateData } = props;
+    const { item, eventKey, updateData, setSelectedEditItem, setShowEditModal } = props;
 
     const { date, itemType, desc } = item;
 
@@ -46,9 +48,20 @@ export const ItemView: FC<ItemViewProps> = function (props) {
                             <br />
                             {desc}
                         </Card.Text>
-                        <Button variant="primary" onClick={setShowDeleteModal}>
-                            Delete
-                        </Button>
+                        <ButtonGroup>
+                            <Button
+                                variant="secondary"
+                                onClick={() => {
+                                    setSelectedEditItem(item);
+                                    setShowEditModal(true);
+                                }}
+                            >
+                                Edit
+                            </Button>
+                            <Button variant="warning" onClick={setShowDeleteModal}>
+                                Delete
+                            </Button>
+                        </ButtonGroup>
                     </Card.Body>
                 </Accordion.Collapse>
             </Card>

@@ -7,10 +7,10 @@ import {
 } from '../lib/db/localStorageWrapper';
 import { useEffect, useState } from 'react';
 const Settings: NextPage = () => {
-    const [selectedC, setSelectedC] = useState(false);
+    const [selectedTemperatureUnitAsCelcius, setSelectedTemperatureUnitAsCelcius] = useState(false);
     // get from localstorage
     useEffect(() => {
-        setSelectedC(
+        setSelectedTemperatureUnitAsCelcius(
             LocalStorageWrapper.get(localStorageKeys.tempIsCelcius, 'no') ===
                 'yes'
         );
@@ -28,10 +28,10 @@ const Settings: NextPage = () => {
                             type="radio"
                             name="selectedUnit"
                             id="is-C"
-                            checked={selectedC}
+                            checked={selectedTemperatureUnitAsCelcius}
                             label="C"
                             onClick={(e) => {
-                                setSelectedC(true);
+                                setSelectedTemperatureUnitAsCelcius(true);
                                 LocalStorageWrapper.put(
                                     localStorageKeys.tempIsCelcius,
                                     'yes'
@@ -44,9 +44,9 @@ const Settings: NextPage = () => {
                             name="selectedUnit"
                             id="is-F"
                             label="F"
-                            checked={!selectedC}
+                            checked={!selectedTemperatureUnitAsCelcius}
                             onClick={(e) =>{
-                                setSelectedC(false);
+                                setSelectedTemperatureUnitAsCelcius(false);
                                 LocalStorageWrapper.put(
                                     localStorageKeys.tempIsCelcius,
                                     'no'

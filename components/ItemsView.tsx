@@ -9,8 +9,8 @@ import { DataInputForm } from './forms/DataInputForm';
 
 export const ItemsView: FC = function () {
     // which page am i in?
-    const [pageNum, setPageNum] = useState(0);
-    const pageOffset = pageNum * pageSizes;
+    const [pageIndex, setPageIndex] = useState(0);
+    const pageOffset = pageIndex * pageSizes;
 
     // how many pages?
     const [pageCount, setPageCount] = useState(0);
@@ -25,7 +25,7 @@ export const ItemsView: FC = function () {
 
     // data fetching
     const { data, error, mutate } = useIDBFetcher('getVal', true, pageOffset, pageSizes, { refreshInterval: 2000 });
-    // helper function
+    /** Helper function to refresh the items list from db */
     const updateData = async () => {
         await refreshCount();
         await mutate(undefined, true);
@@ -36,7 +36,7 @@ export const ItemsView: FC = function () {
     // what item type
     const [formItemType, setFormItemType] = useState(ItemType.TEMP);
     // create form modal states
-    const [showCreateForm, setShowCreateForm] = useState(false);
+    const [showInputForm, setShowInputForm] = useState(false);
     const [selectedEditItem, setSelectedEditItem] = useState<Item | null>(null);
 
     const confirmClear = async () => {
@@ -64,6 +64,8 @@ export const ItemsView: FC = function () {
                         key={JSON.stringify(item)}
                         item={item}
                         eventKey={JSON.stringify(item)}
+                        setSelectedEditItem={setSelectedEditItem}
+                        setShowEditModal={setShowInputForm}
                         updateData={updateData}
                     />
                 ))}
@@ -76,24 +78,20 @@ export const ItemsView: FC = function () {
                 <Col md={{ span: 6, offset: 3 }}>
                     <ButtonGroup aria-label="Buttons" className="full-width spacer-top-margin">
                         <DropdownButton as={ButtonGroup} title="Add">
-                            <Dropdown.Item
-                                eventKey="1"
-                                onClick={() => {
-                                    setFormItemType(ItemType.TEMP);
-                                    setShowCreateForm(true);
-                                }}
-                            >
-                                {itemTypeToString(ItemType.TEMP)}
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                eventKey="2"
-                                onClick={() => {
-                                    setFormItemType(ItemType.OXY);
-                                    setShowCreateForm(true);
-                                }}
-                            >
-                                {itemTypeToString(ItemType.OXY)}
-                            </Dropdown.Item>
+                            {[ItemType.TEMP, ItemType.OXY,ItemType.PULSE].map((e, i) => {
+                                return (
+                                    <Dropdown.Item
+                                        key={e}
+                                        eventKey={`${i}`}
+                                        onClick={() => {
+                                            setFormItemType(e);
+                                            setShowInputForm(true);
+                                        }}
+                                    >
+                                        {itemTypeToString(e)}
+                                    </Dropdown.Item>
+                                );
+                            })}
                         </DropdownButton>
                         {/* <br /> */}
                         <Button onClick={() => updateData()}>Refresh </Button>
@@ -114,7 +112,16 @@ export const ItemsView: FC = function () {
                 </Modal.Footer>
             </Modal>
 
-            <DataInputForm {...{ itemType: formItemType, showCreateForm, setShowCreateForm, updateData }} />
+            <DataInputForm
+                {...{
+                    itemType: formItemType,
+                    showCreateForm: showInputForm,
+                    setShowCreateForm: setShowInputForm,
+                    updateData,
+                    existingItem: selectedEditItem,
+                    setExistingItem: setSelectedEditItem
+                }}
+            />
             <br />
 
             {dataFragment}
@@ -123,20 +130,20 @@ export const ItemsView: FC = function () {
                 <Col md={{ span: 6, offset: 3 }}>
                     {pageCount > 0 && (
                         <ButtonGroup className="spacer-top-margin-lot">
-                            <Button
+                            <Button disabled={pageIndex<=1}
                                 onClick={() => {
-                                    if (pageNum > pageCount) setPageNum(0);
-                                    else if (pageNum < 1) setPageNum(0);
-                                    else setPageNum(pageNum - 1);
+                                    if (pageIndex > pageCount) setPageIndex(0);
+                                    else if (pageIndex < 1) setPageIndex(0);
+                                    else setPageIndex(pageIndex - 1);
                                 }}
                             >
                                 Prev
                             </Button>
-                            <Button disabled>{`${pageNum + 1}/${pageCount}`}</Button>
-                            <Button
+                            <Button disabled>{`${pageIndex + 1}/${pageCount}`}</Button>
+                            <Button disabled={pageIndex+1>=pageCount}
                                 onClick={() => {
                                     // increment only if lesser
-                                    pageNum < pageCount - 1 && setPageNum(pageNum + 1);
+                                    pageIndex < pageCount - 1 && setPageIndex(pageIndex + 1);
                                 }}
                             >
                                 Next
