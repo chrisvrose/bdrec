@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { IDBItemHandler } from '../../lib/db/idbWrapper';
 import { Item, ItemType } from '../../lib/Item';
-import { formStrings } from '../../lib/constants';
+import { formStrings, getFormConfig } from '../../lib/constants';
 
 export interface OxyFormProps {
     showCreateForm: boolean;
@@ -70,7 +70,8 @@ export const DataInputForm: FC<OxyFormProps> = function ({
                             type="number"
                             name="numinput"
                             min={0}
-                            max={100}
+                            max={getFormConfig(itemType,'inputValueMax')}
+                            step={getFormConfig(itemType,'inputValueStep')}
                             value={existingItem?.value}
                         />
                     </Form.Group>

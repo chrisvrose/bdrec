@@ -33,3 +33,22 @@ export const formStrings = {
         addPlaceHolder: itemTypeToString(ItemType.SL),
     },
 };
+
+const formConfig = {
+    inputValueStep: {
+        [ItemType.TEMP]: 0.1,
+        [ItemType.OXY]: 1,
+        [ItemType.SL]: 1,
+        [ItemType.PULSE]: 1,
+    },
+    inputValueMax:{
+        [ItemType.TEMP]: 150,
+        [ItemType.OXY]: 100,
+        [ItemType.SL]: 300,
+        [ItemType.PULSE]: 300,
+    }
+};
+
+export function getFormConfig(type: ItemType, configName: keyof typeof formConfig): number {
+    return formConfig[configName][type];
+}
