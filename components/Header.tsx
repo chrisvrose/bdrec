@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 
 /** Props for header */
 export type HeaderProps = {
@@ -10,6 +10,8 @@ export type HeaderProps = {
     /** Current active key in the navbar */
     activeKey: 'home' | 'plot'|'settings'|undefined;
 };
+
+const isPlotEnabled = false;
 
 /** Head along with Navbar */
 export const Header: FC<HeaderProps> = function ({ title, activeKey }) {
@@ -58,9 +60,9 @@ export const Header: FC<HeaderProps> = function ({ title, activeKey }) {
                                 <Nav.Link eventKey="home">Home</Nav.Link>
                             </Link>
 
-                            <Link href="/plot" passHref>
+                            {isPlotEnabled && <Link href="/plot" passHref>
                                 <Nav.Link eventKey="plot">Plot</Nav.Link>
-                            </Link>
+                            </Link>}
                             <Link href="/settings" passHref>
                                 <Nav.Link eventKey="settings">Settings</Nav.Link>
                             </Link>

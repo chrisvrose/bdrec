@@ -7,7 +7,7 @@ const Home: NextPage = () => {
     return (
         <>
             <Header title="Log" activeKey="home" />
-            <Container >
+            <Container>
                 <ItemsView />
             </Container>
         </>
