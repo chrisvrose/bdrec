@@ -38,7 +38,7 @@ export const formStrings:FormStringsType = {
 
 const formConfig = {
     inputValueStep: {
-        [ItemType.TEMP]: 0.1,
+        [ItemType.TEMP]: 0.01,
         [ItemType.OXY]: 1,
         [ItemType.SUGAR_LEVEL]: 1,
         [ItemType.PULSE]: 1,
