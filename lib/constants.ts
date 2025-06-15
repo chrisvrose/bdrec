@@ -2,11 +2,13 @@ import { ItemType, itemTypeToString } from './Item';
 
 /** Nice date time formatting options */
 export const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
+    // year: 'numeric',
+    // month: 'short',
+    // day: '2-digit',
+    // hour: '2-digit',
+    // minute: '2-digit',
+    dateStyle: 'short',
+    timeStyle: 'short'
 };
 
 export const pageSizes = 15;
