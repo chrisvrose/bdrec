@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { IDBItemHandler } from '../../lib/db/idbWrapper';
-import { Item, ItemType } from '../../lib/Item';
+import { Item, ItemType, normalizeInputItem } from '../../lib/Item';
 import { formStrings, getFormConfig } from '../../lib/constants';
 
 export interface OxyFormProps {
@@ -53,15 +53,16 @@ export const DataInputForm: FC<OxyFormProps> = function ({
                     const formElement = e.target as any;
                     const num = parseInt(formElement.numinput.value);
                     const desc: string = formElement.desc.value;
-                    // whether c is checked
-                    const item = Item(itemType, existingItem?.date, num, desc);
+
+                    const item = normalizeInputItem(Item(itemType, existingItem?.date, num, desc));
+
                     await IDBItemHandler.edit(existingItem?.date, item);
 
                     setShowCreateForm(false);
                     await updateData();
                 }}
             >
-                <Modal.Header>{formStrings[itemType].addButtonText}</Modal.Header>
+                <Modal.Header>{formStrings[itemType].addFormHeadingText}</Modal.Header>
                 <Modal.Body>
                     <Form.Group>
                         <Form.Label>{formStrings[itemType].addLabel}</Form.Label>
@@ -70,15 +71,20 @@ export const DataInputForm: FC<OxyFormProps> = function ({
                             type="number"
                             name="numinput"
                             min={0}
-                            max={getFormConfig(itemType,'inputValueMax')}
-                            step={getFormConfig(itemType,'inputValueStep')}
+                            max={getFormConfig(itemType, 'inputValueMax')}
+                            step={getFormConfig(itemType, 'inputValueStep')}
                             value={existingItem?.value}
                         />
                     </Form.Group>
 
                     <Form.Group controlId="exampleForm.ControlTextarea1">
                         <Form.Label>Description</Form.Label>
-                        <Form.Control as="textarea" rows={3} placeholder="Description(Optional)" name="desc" />
+                        <Form.Control
+                            as="textarea"
+                            rows={3}
+                            placeholder="Description -- E.g. Medicines taken ()"
+                            name="desc"
+                        />
                     </Form.Group>
                 </Modal.Body>
 

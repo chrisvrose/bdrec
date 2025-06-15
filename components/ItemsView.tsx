@@ -1,8 +1,18 @@
 import { FC, ReactChild, useEffect, useState } from 'react';
-import { Accordion, Button, ButtonGroup, Col, Dropdown, DropdownButton, Modal, Row } from 'react-bootstrap';
+import {
+    Accordion,
+    Button,
+    ButtonGroup,
+    ButtonToolbar,
+    Col,
+    Dropdown,
+    DropdownButton,
+    Modal,
+    Row,
+} from 'react-bootstrap';
 import { pageSizes } from '../lib/constants';
 import { IDBItemHandler } from '../lib/db/idbWrapper';
-import { Item, ItemType, itemTypeToString } from '../lib/Item';
+import { ENABLED_ITEMS, Item, ItemType, itemTypeToString } from '../lib/Item';
 import { useIDBFetcher } from '../lib/miscSwr';
 import { ItemView } from './ItemView';
 import { DataInputForm } from './forms/DataInputForm';
@@ -55,7 +65,7 @@ export const ItemsView: FC = function () {
     } else if (!data) {
         dataFragment = <div>Loading</div>;
     } else if ((data.length ?? 0) === 0) {
-        dataFragment = <div>No data (Add an entry)</div>;
+        dataFragment = <div style={{"textAlign":"center"}}>{"Nothing here yet! :)"}</div>;
     } else
         dataFragment = (
             <Accordion>
@@ -76,27 +86,31 @@ export const ItemsView: FC = function () {
         <>
             <Row style={{ textAlign: 'center' }} md={8}>
                 <Col md={{ span: 6, offset: 3 }}>
-                    <ButtonGroup aria-label="Buttons" className="full-width spacer-top-margin">
-                        <DropdownButton as={ButtonGroup} title="Add">
-                            {[ItemType.TEMP, ItemType.OXY,ItemType.PULSE].map((e, i) => {
-                                return (
-                                    <Dropdown.Item
-                                        key={e}
-                                        eventKey={`${i}`}
-                                        onClick={() => {
-                                            setFormItemType(e);
-                                            setShowInputForm(true);
-                                        }}
-                                    >
-                                        {itemTypeToString(e)}
-                                    </Dropdown.Item>
-                                );
-                            })}
-                        </DropdownButton>
-                        {/* <br /> */}
-                        <Button onClick={() => updateData()}>Refresh </Button>
-                        <Button onClick={() => setShowClearModal(true)}>Clear</Button>
-                    </ButtonGroup>
+                    <ButtonToolbar className="justify-content-between">
+                        <ButtonGroup aria-label="Buttons" className="spacer-top-margin">
+                            <DropdownButton as={ButtonGroup} title="Add">
+                                {ENABLED_ITEMS.map((e, i) => {
+                                    return (
+                                        <Dropdown.Item
+                                            key={e}
+                                            eventKey={`${i}`}
+                                            onClick={() => {
+                                                setFormItemType(e);
+                                                setShowInputForm(true);
+                                            }}
+                                        >
+                                            {itemTypeToString(e)}
+                                        </Dropdown.Item>
+                                    );
+                                })}
+                            </DropdownButton>
+                        </ButtonGroup>
+                        <ButtonGroup className="spacer-top-margin">
+                            <Button onClick={() => updateData()}>Refresh</Button>
+                            <Button onClick={() => setShowClearModal(true)}>Clear</Button>
+                        </ButtonGroup>
+
+                    </ButtonToolbar>
                 </Col>
             </Row>
             <Modal show={showClearModal} onHide={() => setShowClearModal(false)}>
@@ -106,7 +120,7 @@ export const ItemsView: FC = function () {
                     <Button variant="secondary" onClick={() => setShowClearModal(false)}>
                         Cancel
                     </Button>
-                    <Button variant="primary" onClick={confirmClear}>
+                    <Button variant="danger" onClick={confirmClear}>
                         Confirm
                     </Button>
                 </Modal.Footer>
@@ -119,7 +133,7 @@ export const ItemsView: FC = function () {
                     setShowCreateForm: setShowInputForm,
                     updateData,
                     existingItem: selectedEditItem,
-                    setExistingItem: setSelectedEditItem
+                    setExistingItem: setSelectedEditItem,
                 }}
             />
             <br />
@@ -130,7 +144,8 @@ export const ItemsView: FC = function () {
                 <Col md={{ span: 6, offset: 3 }}>
                     {pageCount > 0 && (
                         <ButtonGroup className="spacer-top-margin-lot">
-                            <Button disabled={pageIndex<=1}
+                            <Button
+                                disabled={pageIndex <= 1}
                                 onClick={() => {
                                     if (pageIndex > pageCount) setPageIndex(0);
                                     else if (pageIndex < 1) setPageIndex(0);
@@ -140,7 +155,8 @@ export const ItemsView: FC = function () {
                                 Prev
                             </Button>
                             <Button disabled>{`${pageIndex + 1}/${pageCount}`}</Button>
-                            <Button disabled={pageIndex+1>=pageCount}
+                            <Button
+                                disabled={pageIndex + 1 >= pageCount}
                                 onClick={() => {
                                     // increment only if lesser
                                     pageIndex < pageCount - 1 && setPageIndex(pageIndex + 1);

@@ -4,17 +4,19 @@ export enum ItemType {
     TEMP,
     OXY,
     PULSE,
-    SL,
+    SUGAR_LEVEL,
 }
+
+export const ENABLED_ITEMS = [ItemType.TEMP, ItemType.OXY, ItemType.PULSE, ItemType.SUGAR_LEVEL];
 
 /**
  * String representation of the entire ordeal
  */
-const itemTypeMap: { [k in ItemType]: string } = {
+export const ITEM_TYPE_MAP: { [k in ItemType]: string } = {
     [ItemType.TEMP]: 'Temperature',
     [ItemType.OXY]: 'Blood Oxygen Level',
     [ItemType.PULSE]: 'Pulse',
-    [ItemType.SL]: 'Blood Glucose',
+    [ItemType.SUGAR_LEVEL]: 'Blood Glucose',
 };
 
 /**
@@ -23,31 +25,43 @@ const itemTypeMap: { [k in ItemType]: string } = {
  * @returns
  */
 export function itemTypeToString(x: ItemType) {
-    return itemTypeMap[x];
+    return ITEM_TYPE_MAP[x];
 }
 
 export function tempUnitConvert(x: number) {
-    const isCelcius =
-        LocalStorageWrapper.get(localStorageKeys.tempIsCelcius, 'no') === 'yes';
+    const isCelcius = LocalStorageWrapper.getBoolean(localStorageKeys.tempIsCelcius, false);
     return isCelcius
         ? {
-              unitString: ' °C',
-              num: 5 * x,
-          }
+            unitString: ' °C',
+            num: 5 * x,
+        }
         : {
-              unitString: ' °F',
-              num: 9 * x + 32,
-          };
+            unitString: ' °F',
+            num: 9 * x + 32,
+        };
 }
 /**
- *
+ * Store temperature in a neutral format so it can be showed in C or F as required.
+ * Stores it in 5*(temperature in Celcius).
  * @param x input number
  * @param isCelcius is celcius (true)
  */
-export function toTempMiddleFormat(x: number, isCelcius: boolean = true) {
+function toTempMiddleFormat(x: number, isCelcius: boolean = true) {
     if (isCelcius) return x / 5;
-    // for fahrenheit
-    else return (x - 32) / 9;
+    // fahrenheit
+    return (x - 32) / 9;
+}
+
+/**
+ * Normalize input values according to selected configuration.
+ * @param item 
+ * @returns 
+ */
+export function normalizeInputItem(item:Item){
+    if(item.itemType===ItemType.TEMP){
+        item.value = toTempMiddleFormat(item.value,LocalStorageWrapper.getBoolean(localStorageKeys.tempIsCelcius));
+    }
+    return item;
 }
 
 /** Format item value */
@@ -61,7 +75,7 @@ export function ItemValueFormat(x: Item) {
             return `${x.value}% SpO2`;
         case ItemType.PULSE:
             return `${x.value} bpm`;
-        case ItemType.SL:
+        case ItemType.SUGAR_LEVEL:
             return `${x.value} mg/dl`;
     }
 }
