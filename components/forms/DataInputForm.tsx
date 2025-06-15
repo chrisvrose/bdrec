@@ -82,7 +82,7 @@ export const DataInputForm: FC<OxyFormProps> = function ({
                         <Form.Control
                             as="textarea"
                             rows={3}
-                            placeholder="Description -- E.g. Medicines taken ()"
+                            placeholder="Description -- E.g. Medicines taken (Optional)"
                             name="desc"
                         />
                     </Form.Group>
