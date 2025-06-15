@@ -1,19 +1,13 @@
 import type { NextPage } from 'next';
 import { Header } from '../components/Header';
 import { Container, Form } from 'react-bootstrap';
-import {
-    localStorageKeys,
-    LocalStorageWrapper,
-} from '../lib/db/localStorageWrapper';
+import { localStorageKeys, LocalStorageWrapper } from '../lib/db/localStorageWrapper';
 import { useEffect, useState } from 'react';
 const Settings: NextPage = () => {
     const [selectedTemperatureUnitAsCelcius, setSelectedTemperatureUnitAsCelcius] = useState(false);
     // get from localstorage
     useEffect(() => {
-        setSelectedTemperatureUnitAsCelcius(
-            LocalStorageWrapper.get(localStorageKeys.tempIsCelcius, 'no') ===
-                'yes'
-        );
+        setSelectedTemperatureUnitAsCelcius(LocalStorageWrapper.getBoolean(localStorageKeys.tempIsCelcius, false));
     }, []);
     return (
         <>
@@ -32,10 +26,7 @@ const Settings: NextPage = () => {
                             label="C"
                             onClick={(e) => {
                                 setSelectedTemperatureUnitAsCelcius(true);
-                                LocalStorageWrapper.put(
-                                    localStorageKeys.tempIsCelcius,
-                                    'yes'
-                                );
+                                LocalStorageWrapper.putBoolean(localStorageKeys.tempIsCelcius, true);
                             }}
                         />
                         <Form.Check
@@ -45,13 +36,10 @@ const Settings: NextPage = () => {
                             id="is-F"
                             label="F"
                             checked={!selectedTemperatureUnitAsCelcius}
-                            onClick={(e) =>{
+                            onClick={(e) => {
                                 setSelectedTemperatureUnitAsCelcius(false);
-                                LocalStorageWrapper.put(
-                                    localStorageKeys.tempIsCelcius,
-                                    'no'
-                                )}
-                            }
+                                LocalStorageWrapper.putBoolean(localStorageKeys.tempIsCelcius, false);
+                            }}
                         />
                     </Form.Group>
                 </Form>
