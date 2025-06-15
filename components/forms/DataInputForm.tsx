@@ -51,7 +51,7 @@ export const DataInputForm: FC<OxyFormProps> = function ({
 
                     // little foobar
                     const formElement = e.target as any;
-                    const num = parseInt(formElement.numinput.value);
+                    const num = parseFloat(formElement.numinput.value);
                     const desc: string = formElement.desc.value;
 
                     const item = normalizeInputItem(Item(itemType, existingItem?.date, num, desc));
