@@ -11,26 +11,28 @@ export const dateTimeFormatOptions: Intl.DateTimeFormatOptions = {
 
 export const pageSizes = 15;
 
-export const formStrings = {
+type FormStringsType = {[k in ItemType]:{addFormHeadingText:string,addLabel:string,addPlaceHolder: string}};
+
+export const formStrings:FormStringsType = {
     [ItemType.OXY]: {
-        addButtonText: 'Add Oxygen reading',
-        addLabel: 'SpO2 reading',
+        addFormHeadingText: 'Add Oxygen reading',
+        addLabel: 'SpO2 reading (%)',
         addPlaceHolder: itemTypeToString(ItemType.OXY),
     },
     [ItemType.TEMP]: {
-        addButtonText: 'Add Temperature reading',
+        addFormHeadingText: 'Add Temperature reading',
         addLabel: 'Temperature reading',
         addPlaceHolder: itemTypeToString(ItemType.TEMP),
     },
     [ItemType.PULSE]: {
-        addButtonText: 'Add Pulse Reading',
-        addLabel: '',
+        addFormHeadingText: 'Add Pulse Reading',
+        addLabel: 'Pulse Reading (bpm)',
         addPlaceHolder: itemTypeToString(ItemType.PULSE),
     },
-    [ItemType.SL]: {
-        addButtonText: 'Add Blood Sugar Reading',
-        addLabel: '',
-        addPlaceHolder: itemTypeToString(ItemType.SL),
+    [ItemType.SUGAR_LEVEL]: {
+        addFormHeadingText: 'Add Blood Sugar Reading',
+        addLabel: 'Blood Sugar levels (mg/dl)',
+        addPlaceHolder: itemTypeToString(ItemType.SUGAR_LEVEL),
     },
 };
 
@@ -38,13 +40,13 @@ const formConfig = {
     inputValueStep: {
         [ItemType.TEMP]: 0.1,
         [ItemType.OXY]: 1,
-        [ItemType.SL]: 1,
+        [ItemType.SUGAR_LEVEL]: 1,
         [ItemType.PULSE]: 1,
     },
     inputValueMax:{
         [ItemType.TEMP]: 150,
         [ItemType.OXY]: 100,
-        [ItemType.SL]: 300,
+        [ItemType.SUGAR_LEVEL]: 300,
         [ItemType.PULSE]: 300,
     }
 };
