@@ -4,8 +4,8 @@ import { Item } from '../Item';
  * Convenience wrapper type
  */
 export interface ItemSchema extends DBSchema {
-    [IDBItemHandler._collName]: {
-        key: Item[typeof IDBItemHandler._keyPath];
+    [IDBItemHandler.COLLECTION_NAME]: {
+        key: Item[typeof IDBItemHandler.COLLECTION_INDEX_KEY_NAME];
         value: Item;
     };
 }
@@ -14,10 +14,10 @@ export interface ItemSchema extends DBSchema {
  * IndexedDB Wrapper using Item
  */
 export class IDBItemHandler {
-    public static readonly _dbName = 'vir';
-    public static readonly _collName = 'readings';
+    public static readonly DB_NAME = 'vir';
+    public static readonly COLLECTION_NAME = 'readings';
     /* index to use. */
-    public static readonly _keyPath = 'date';
+    public static readonly COLLECTION_INDEX_KEY_NAME = 'date';
 
     /**Internal Reference (lazily created) do not use directly */
     private static _db: IDBPDatabase<ItemSchema> | null = null;
@@ -32,15 +32,15 @@ export class IDBItemHandler {
         //get the db first
         const dbStore =
             IDBItemHandler._db ??
-            (await openDB(IDBItemHandler._dbName, 1, {
-                upgrade: (db, oldv, newv, transaction) => {
+            (await openDB(IDBItemHandler.DB_NAME, 1, {
+                upgrade: (db, oldVersion, newVersion, transaction) => {
                     // create a collection if it doesnt exist
-                    if (!db.objectStoreNames.contains(IDBItemHandler._collName)) {
-                        db.createObjectStore(IDBItemHandler._collName, {
-                            keyPath: IDBItemHandler._keyPath,
+                    if (!db.objectStoreNames.contains(IDBItemHandler.COLLECTION_NAME)) {
+                        db.createObjectStore(IDBItemHandler.COLLECTION_NAME, {
+                            keyPath: IDBItemHandler.COLLECTION_INDEX_KEY_NAME,
                         });
                     }
-                },
+                }
             }));
 
         return dbStore;
@@ -53,7 +53,7 @@ export class IDBItemHandler {
      */
     static async add(jsonObject: Item) {
         const db = await this.db;
-        return db.add(IDBItemHandler._collName, jsonObject as any);
+        return db.add(IDBItemHandler.COLLECTION_NAME, jsonObject as any);
     }
     /**
      * Edit an existing value
@@ -61,9 +61,9 @@ export class IDBItemHandler {
      * @param item
      * @returns New index date
      */
-    static async edit(key: Item[typeof IDBItemHandler._keyPath] | undefined, item: Item) {
+    static async edit(key: Item[typeof IDBItemHandler.COLLECTION_INDEX_KEY_NAME] | undefined, item: Item) {
         const db = await this.db;
-        return db.put(IDBItemHandler._collName, item, key);
+        return db.put(IDBItemHandler.COLLECTION_NAME, item, key);
     }
 
     /**
@@ -71,9 +71,9 @@ export class IDBItemHandler {
      * @param x
      * @returns
      */
-    static async get(x: Item[typeof IDBItemHandler._keyPath]) {
+    static async get(x: Item[typeof IDBItemHandler.COLLECTION_INDEX_KEY_NAME]) {
         const db = await this.db;
-        return db.get(IDBItemHandler._collName, x);
+        return db.get(IDBItemHandler.COLLECTION_NAME, x);
     }
 
     /**
@@ -83,7 +83,7 @@ export class IDBItemHandler {
     static async getAll() {
         const db = await this.db;
 
-        return db.getAll(IDBItemHandler._collName, undefined);
+        return db.getAll(IDBItemHandler.COLLECTION_NAME, undefined);
     }
 
     /**
@@ -94,7 +94,7 @@ export class IDBItemHandler {
      */
     static async getFromOffset(from: number, length?: number, reverse: boolean = false) {
         // create a transaction
-        const transaction = (await this.db).transaction('readings', 'readonly');
+        const transaction = (await this.db).transaction(IDBItemHandler.COLLECTION_NAME, 'readonly');
         // open a cursor for streamed reading (open reverse if arg is true)
         let cursor = await transaction.store.openCursor(undefined, reverse ? 'prev' : 'next');
 
@@ -121,7 +121,7 @@ export class IDBItemHandler {
      */
     static async getCount() {
         const db = await this.db;
-        return db.count('readings');
+        return db.count(IDBItemHandler.COLLECTION_NAME);
     }
     /**
      * Clears out all store entries
@@ -129,21 +129,21 @@ export class IDBItemHandler {
      */
     static async clear() {
         const db = await this.db;
-        return db.clear('readings');
+        return db.clear(IDBItemHandler.COLLECTION_NAME);
     }
     /**
      * Delete entry at given date
      * @param k Date
      * @returns
      */
-    static async delete(k: Item[typeof IDBItemHandler._keyPath]) {
+    static async delete(k: Item[typeof IDBItemHandler.COLLECTION_INDEX_KEY_NAME]) {
         const db = await this.db;
-        return db.delete(IDBItemHandler._collName, k);
+        return db.delete(IDBItemHandler.COLLECTION_NAME, k);
     }
 }
 
 /**
- * Classical exception
+ * DB Related error.
  */
 export class DBException {
     constructor(private msg: string, private typeException: 'E' | 'W' | 'I' | '?' = 'E') {}
