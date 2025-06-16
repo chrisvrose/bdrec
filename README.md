@@ -2,15 +2,18 @@
 
 ## What
 
-A simple PWA(Progressive Web App) to log your body temperature (and eventually other vitals)!
+A simple PWA(Progressive Web App) to log your body temperature (and other vitals)!
 
 Check out the PWA at [bd.kekvrose.me](https://bd.kekvrose.me)!
+
+Once its loaded, you can "install" it on your phone and it'll work completely offline.
+
 ## Why
 
-Didn't find a good app that didn't have ads on the Android Play Store.
+I have this habit of logging my temperature whenever I get sick.
+I used to do it in notebooks, but when I tried switching to an Android app, I found none that didn't have ads or didn't request access to contacts (? what)
 
 ## How
-
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
@@ -32,7 +35,7 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### Exporting
+#### Exporting
 
 The app is deployed onto Github Pages (No APIs needed!) with:
 ```sh
