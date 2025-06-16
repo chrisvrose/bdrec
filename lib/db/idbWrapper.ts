@@ -53,7 +53,7 @@ export class IDBItemHandler {
      */
     static async add(jsonObject: Item) {
         const db = await this.db;
-        return db.add(IDBItemHandler.COLLECTION_NAME, jsonObject as any);
+        return db.add(IDBItemHandler.COLLECTION_NAME, jsonObject);
     }
     /**
      * Edit an existing value
@@ -63,7 +63,7 @@ export class IDBItemHandler {
      */
     static async edit(key: Item[typeof IDBItemHandler.COLLECTION_INDEX_KEY_NAME] | undefined, item: Item) {
         const db = await this.db;
-        return db.put(IDBItemHandler.COLLECTION_NAME, item, key);
+        return db.put(IDBItemHandler.COLLECTION_NAME, item);
     }
 
     /**
