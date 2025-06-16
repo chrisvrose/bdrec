@@ -5,7 +5,6 @@
 A simple PWA(Progressive Web App) to log your body temperature (and other vitals)!
 
 Check out the PWA at [bd.kekvrose.me](https://bd.kekvrose.me)!
-
 Once its loaded, you can "install" it on your phone and it'll work completely offline.
 
 ## Why
@@ -37,7 +36,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 #### Exporting
 
-The app is deployed onto Github Pages (No APIs needed!) with:
+The app is deployed onto Github Pages with:
 ```sh
 npm run deploy
 ``` 
@@ -47,6 +46,7 @@ This does a few things
 2. Builds the project
 3. Exports the project as a static HTML5 application
 4. Publishes the exported static webpage onto Github Pages.
+
 ### Learn More
 
 To learn more about Next.js, take a look at the following resources:
