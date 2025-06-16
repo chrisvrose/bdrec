@@ -73,7 +73,7 @@ export const DataInputForm: FC<OxyFormProps> = function ({
                             min={0}
                             max={getFormConfig(itemType, 'inputValueMax')}
                             step={getFormConfig(itemType, 'inputValueStep')}
-                            value={existingItem?.value}
+                            defaultValue={existingItem?.value}
                         />
                     </Form.Group>
 
@@ -84,6 +84,7 @@ export const DataInputForm: FC<OxyFormProps> = function ({
                             rows={3}
                             placeholder="Description -- E.g. Medicines taken (Optional)"
                             name="desc"
+                            defaultValue={existingItem?.desc}
                         />
                     </Form.Group>
                 </Modal.Body>

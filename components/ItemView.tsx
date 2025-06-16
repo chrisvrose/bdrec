@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Card, Accordion, Button, Modal, ButtonGroup } from 'react-bootstrap';
 import { dateTimeFormatOptions } from '../lib/constants';
 import { IDBItemHandler } from '../lib/db/idbWrapper';
-import { Item, ItemValueFormat, itemTypeToString } from '../lib/Item';
+import { Item, ItemValueFormat, denormalizeItem, itemTypeToString } from '../lib/Item';
 
 export type ItemViewProps = {
     item: Item;
@@ -52,7 +52,7 @@ export const ItemView: FC<ItemViewProps> = function (props) {
                             <Button
                                 variant="secondary"
                                 onClick={() => {
-                                    setSelectedEditItem(item);
+                                    setSelectedEditItem(denormalizeItem(item));
                                     setShowEditModal(true);
                                 }}
                             >

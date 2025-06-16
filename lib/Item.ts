@@ -63,6 +63,19 @@ export function normalizeInputItem(item:Item){
     }
     return item;
 }
+/**
+ * Denormalize items from middleware config to raw input equivalent.
+ * @param item 
+ * @returns 
+ */
+export function denormalizeItem(item:Item):Item{
+    const value = item.value;
+    if(item.itemType==ItemType.TEMP){
+        const {num: newValue} = tempUnitConvert(value)
+        item.value = newValue;
+    }
+    return item;
+}
 
 /** Format item value */
 export function ItemValueFormat(x: Item) {
