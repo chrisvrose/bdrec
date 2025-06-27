@@ -2,7 +2,7 @@ name: GH Pages Deploy
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   deploy:
     # Ensure test job passes before deploying
