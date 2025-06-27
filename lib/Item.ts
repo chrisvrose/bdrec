@@ -29,7 +29,7 @@ export function itemTypeToString(x: ItemType) {
 }
 
 export function tempUnitConvert(x: number) {
-    const isCelcius = LocalStorageWrapper.getBoolean(localStorageKeys.tempIsCelcius, false);
+    const isCelcius = LocalStorageWrapper.getBoolean(localStorageKeys.tempIsCelcius);
     return isCelcius
         ? {
             unitString: ' °C',

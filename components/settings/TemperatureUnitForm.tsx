@@ -3,12 +3,7 @@ import { localStorageKeys, LocalStorageWrapper } from '../../lib/db/localStorage
 import { Form } from 'react-bootstrap';
 
 export function TemperatureUnitControlForm() {
-    const [selectedTemperatureUnitAsCelcius, setSelectedTemperatureUnitAsCelcius] = useState(false);
-    // get from localstorage
-    useEffect(() => {
-        setSelectedTemperatureUnitAsCelcius(LocalStorageWrapper.getBoolean(localStorageKeys.tempIsCelcius, false));
-    }, []);
-
+    const [selectedTemperatureUnitAsCelcius, setSelectedTemperatureUnitAsCelcius] = useState(()=>LocalStorageWrapper.getBoolean(localStorageKeys.tempIsCelcius));
     return (
         <Form>
             <Form.Group>

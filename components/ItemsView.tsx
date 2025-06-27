@@ -106,7 +106,6 @@ export const ItemsView: FC = function () {
                             </DropdownButton>
                         </ButtonGroup>
                         <ButtonGroup className="spacer-top-margin">
-                            <Button onClick={() => updateData()}>Refresh</Button>
                             <Button onClick={() => setShowClearModal(true)}>Clear</Button>
                         </ButtonGroup>
 
