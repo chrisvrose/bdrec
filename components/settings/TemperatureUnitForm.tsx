@@ -3,7 +3,10 @@ import { localStorageKeys, LocalStorageWrapper } from '../../lib/db/localStorage
 import { Form } from 'react-bootstrap';
 
 export function TemperatureUnitControlForm() {
-    const [selectedTemperatureUnitAsCelcius, setSelectedTemperatureUnitAsCelcius] = useState(()=>LocalStorageWrapper.getBoolean(localStorageKeys.tempIsCelcius));
+    const [selectedTemperatureUnitAsCelcius, setSelectedTemperatureUnitAsCelcius] = useState(false);
+    useEffect(() => {
+        setSelectedTemperatureUnitAsCelcius(LocalStorageWrapper.getBoolean(localStorageKeys.tempIsCelcius));
+    }, []);
     return (
         <Form>
             <Form.Group>
@@ -14,7 +17,7 @@ export function TemperatureUnitControlForm() {
                     type="radio"
                     name="selectedUnit"
                     id="is-C"
-                    defaultChecked={selectedTemperatureUnitAsCelcius}
+                    checked={selectedTemperatureUnitAsCelcius}
                     label="C"
                     onClick={(e) => {
                         setSelectedTemperatureUnitAsCelcius(true);
@@ -27,7 +30,7 @@ export function TemperatureUnitControlForm() {
                     name="selectedUnit"
                     id="is-F"
                     label="F"
-                    defaultChecked={!selectedTemperatureUnitAsCelcius}
+                    checked={!selectedTemperatureUnitAsCelcius}
                     onClick={(e) => {
                         setSelectedTemperatureUnitAsCelcius(false);
                         LocalStorageWrapper.putBoolean(localStorageKeys.tempIsCelcius, false);
